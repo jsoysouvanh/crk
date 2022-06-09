@@ -10,7 +10,15 @@ add_library(${crkLibraryTarget}
 				)
 
 # Setup language requirements
-target_compile_features(${crkLibraryTarget} PUBLIC cxx_std_11)
+if (NOT CRK_MIN_CXX_STD_VERSION)
+	set(CRK_MIN_CXX_STD_VERSION cxx_std_17)
+elseif(CRK_MIN_CXX_STD_VERSION EQUAL 17)
+	set(CRK_MIN_CXX_STD_VERSION cxx_std_17)	# Default to c++11
+elseif(CRK_MIN_CXX_STD_VERSION EQUAL 20)
+	set(CRK_MIN_CXX_STD_VERSION cxx_std_20)
+endif()
+
+target_compile_features(${crkLibraryTarget} PUBLIC ${CRK_MIN_CXX_STD_VERSION})
 
 target_include_directories(${crkLibraryTarget}
 							PUBLIC	Include/Public
