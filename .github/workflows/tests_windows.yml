@@ -16,6 +16,7 @@ jobs:
       fail-fast: false
       matrix:
         build_config: [Release, Debug]
+        cpp_version: [17, 20]
 
     steps:
       - name: Checkout repository
@@ -24,7 +25,7 @@ jobs:
           submodules: 'recursive'
 
       - name: Generate Project
-        run: cmake -B Build/${{ matrix.build_config }} -DCMAKE_BUILD_TYPE=${{ matrix.build_config }} -DCRK_DEV=1 -G "Visual Studio 16 2019" -A x64
+        run: cmake -B Build/${{ matrix.build_config }} -DCMAKE_BUILD_TYPE=${{ matrix.build_config }} -DCRK_MIN_CXX_STD_VERSION=${{matrix.cpp_version}} -DCRK_DEV=1 -G "Visual Studio 16 2019" -A x64
 
       - name: Build crk
         run: cmake --build Build/${{ matrix.build_config }} --config ${{ matrix.build_config }} --verbose

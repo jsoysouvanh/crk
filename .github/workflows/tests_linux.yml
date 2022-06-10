@@ -58,15 +58,15 @@ jobs:
         run: |
           cd Build/${{ matrix.build_config }} && ctest -C ${{ matrix.build_config }} -V
 
-  ubuntu_gcc_clang:
-    name: Ubuntu | Clang/GCC
+  ubuntu_gcc:
+    name: Ubuntu | GCC
     runs-on: ubuntu-latest
 
     strategy:
       fail-fast: false
       matrix:
         build_config: [Release, Debug]
-        gcc_version: [7, 8, 9, 10, 11, 12]
+        gcc_version: [7, 8, 9, 10, 11]
         cpp_version: [17, 20]
         exclude:
           - gcc_version: 7
