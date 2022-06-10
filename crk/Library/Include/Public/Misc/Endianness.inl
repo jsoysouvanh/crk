@@ -36,8 +36,8 @@ constexpr EEndianness getNativeEndianness() noexcept
 #elif defined(_WIN32)
 	return EEndianness::Little;
 
-	//Use an implementation-defined way using multicharacter literal
-	//WARNING: Since the following is implementation-defined, it might not generate the correct result.
+	//Use an implementation-defined way with multicharacter literal int initialization.
+	//WARNING: Since the following is implementation-defined, it might not generate the correct result with some compilers.
 	//		   However, relatively few systems should fallback to this implementation.
 	//Can't use the reinterpret-cast way since reinterpret_cast can't be used in constexpr context
 	//Can't use union since type-punning is UB in C++ and throws a compilation error on some compilers (clang)
