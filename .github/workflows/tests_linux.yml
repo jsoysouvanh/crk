@@ -26,6 +26,9 @@ jobs:
           - clang_version: 9
             cpp_version: 20
 
+    env:
+      cxx_compiler_version: -${{ matrix.clang_version }}
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -41,18 +44,13 @@ jobs:
       - name: Install CMake
         uses: jwlawson/actions-setup-cmake@v1.8
         with:
-          cmake-version: '3.15.0'
-
-      - name: Setup Compiler
-        run: |
-          echo "CC=clang-${{ matrix.clang_version }}" >> $GITHUB_ENV
-          echo "CXX=clang++-${{ matrix.clang_version }}" >> $GITHUB_ENV
-
+          cmake-version: '3.21.0'
+          
       - name: Generate Project
-        run: cmake -B Build/${{ matrix.build_config }} -DCMAKE_BUILD_TYPE=${{ matrix.build_config }} -DCRK_MIN_CXX_STD_VERSION=${{matrix.cpp_version}} -DCRK_DEV=1 -G "Ninja"
+        run: cmake --preset="Clang" -DCRK_MIN_CXX_STD_VERSION=${{matrix.cpp_version}} -DCRK_DEV=1
 
       - name: Build crk
-        run: cmake --build Build/${{ matrix.build_config }} --config ${{ matrix.build_config }} --verbose
+        run: cmake --build --preset="Clang ${{ matrix.build_config }}"
 
       - name: Run Tests
         run: |
@@ -91,7 +89,7 @@ jobs:
       - name: Install CMake
         uses: jwlawson/actions-setup-cmake@v1.8
         with:
-          cmake-version: '3.15.0'
+          cmake-version: '3.21.0'
 
       - name: Setup Compiler
         run: |

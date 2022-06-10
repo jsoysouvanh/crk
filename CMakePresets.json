@@ -1,0 +1,71 @@
+{
+	"version": 3,
+	"configurePresets": 
+	[
+		{
+			"name": "Base",
+			"hidden": true,
+			"generator": "Ninja Multi-Config",
+			"binaryDir": "${sourceDir}/Build/${presetName}",
+			"environment": {}
+		},
+		{
+			"name": "Clang",
+			"inherits": "Base",
+			"cacheVariables": {
+				"CMAKE_C_COMPILER": "clang$env{cxx_compiler_version}",
+				"CMAKE_CXX_COMPILER": "clang++$env{cxx_compiler_version}"
+			}
+		},
+		{
+			"name": "GCC",
+			"inherits": "Base",
+			"cacheVariables": {
+				"CMAKE_C_COMPILER": "gcc$env{cxx_compiler_version}",
+				"CMAKE_CXX_COMPILER": "g++$env{cxx_compiler_version}"
+			}
+		}
+	],
+	"buildPresets": 
+	[
+		{
+			"name": "Base",
+			"hidden": true,
+			"verbose": true
+		},
+		{
+			"name": "Debug",
+			"hidden": true,
+			"inherits": "Base",
+			"configuration": "Debug"
+		},
+		{
+			"name": "Release",
+			"hidden": true,
+			"inherits": "Base",
+			"configuration": "Release"
+		},
+		{
+			"name": "Clang Debug",
+			"inherits": "Debug",
+			"displayName": "Default",
+			"configurePreset": "Clang"
+		},
+		{
+			"name": "Clang Release",
+			"inherits": "Release",
+			"displayName": "Default",
+			"configurePreset": "Clang"
+		},
+		{
+			"name": "GCC Debug",
+			"inherits": "Debug",
+			"configurePreset": "GCC"
+		},
+		{
+			"name": "GCC Release",
+			"inherits": "Release",
+			"configurePreset": "GCC"
+		}
+	]
+}

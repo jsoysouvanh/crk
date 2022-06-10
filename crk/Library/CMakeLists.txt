@@ -1,5 +1,3 @@
-cmake_minimum_required(VERSION 3.13.5)
-
 project(crkLibrary)
 
 # Add Refureku library
@@ -11,9 +9,9 @@ add_library(${crkLibraryTarget}
 
 # Setup language requirements
 if (NOT CRK_MIN_CXX_STD_VERSION)
-	set(CRK_MIN_CXX_STD_VERSION cxx_std_17)
+	set(CRK_MIN_CXX_STD_VERSION cxx_std_17)	# Default to c++17
 elseif(CRK_MIN_CXX_STD_VERSION EQUAL 17)
-	set(CRK_MIN_CXX_STD_VERSION cxx_std_17)	# Default to c++11
+	set(CRK_MIN_CXX_STD_VERSION cxx_std_17)
 elseif(CRK_MIN_CXX_STD_VERSION EQUAL 20)
 	set(CRK_MIN_CXX_STD_VERSION cxx_std_20)
 endif()
@@ -33,7 +31,7 @@ if (MSVC)
 
 else()	# Clang or GCC
 
-	target_compile_options(${crkLibraryTarget} PRIVATE -Wall -Wextra -Wpedantic -fvisibility-ms-compat -fvisibility-inlines-hidden)
+	target_compile_options(${crkLibraryTarget} PRIVATE -Wall -Wextra -Wpedantic)
 	
 	if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND CRK_GEN_CODECOV_REPORT)
 		target_compile_options(${crkLibraryTarget} PUBLIC --coverage)

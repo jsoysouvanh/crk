@@ -30,7 +30,7 @@ jobs:
       - name: Install CMake
         uses: jwlawson/actions-setup-cmake@v1.8
         with:
-          cmake-version: '3.15.0'
+          cmake-version: '3.17.0'
 
       - name: Generate Project
         run: cmake -B Build/${{ matrix.build_config }} -DCMAKE_BUILD_TYPE=${{ matrix.build_config }} -DCRK_MIN_CXX_STD_VERSION=${{matrix.cpp_version}} -DCRK_DEV=1 -G "Ninja"
