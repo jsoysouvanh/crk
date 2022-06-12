@@ -27,7 +27,7 @@ jobs:
             cpp_version: 20
 
     env:
-      cxx_compiler_version: -${{ matrix.clang_version }}
+      clang_compiler_version: -${{ matrix.clang_version }}
 
     steps:
       - name: Checkout repository
@@ -47,14 +47,15 @@ jobs:
           cmake-version: '3.21.0'
           
       - name: Generate Project
-        run: cmake --preset="Clang" -DCRK_MIN_CXX_STD_VERSION=${{matrix.cpp_version}} -DCRK_DEV=1
+        run: |
+          cmake --list-presets=all
+          cmake --preset="Clang" -DCRK_MIN_CXX_STD_VERSION=${{matrix.cpp_version}} -DCRK_DEV=1
 
       - name: Build crk
         run: cmake --build --preset="Clang ${{ matrix.build_config }}"
 
       - name: Run Tests
-        run: |
-          cd Build/${{ matrix.build_config }} && ctest -C ${{ matrix.build_config }} -V
+        run: ctest --preset="Clang ${{ matrix.build_config }}"
 
   ubuntu_gcc:
     name: Ubuntu | GCC
