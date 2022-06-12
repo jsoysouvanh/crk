@@ -52,7 +52,8 @@ jobs:
         run: |
           sudo apt-get install tree
           tree
-          lcov --directory "Build/GCC ${{ matrix.build_config }}" --capture --output-file coverage.info
+          lcov --directory "Build/GCC" --capture --output-file coverage.info
+          tree
         
       - name: Upload coverage to codecov
         uses: codecov/codecov-action@v2
