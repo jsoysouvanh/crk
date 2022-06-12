@@ -6,8 +6,7 @@
 			"name": "Base",
 			"hidden": true,
 			"generator": "Ninja Multi-Config",
-			"binaryDir": "${sourceDir}/Build/${presetName}",
-			"environment": {}
+			"binaryDir": "${sourceDir}/Build/${presetName}"
 		},
 		{
 			"name": "Clang",
@@ -23,8 +22,8 @@
 			"inherits": "Base",
 			"cacheVariables": 
 			{
-				"CMAKE_C_COMPILER": "gcc$env{clang_compiler_version}",
-				"CMAKE_CXX_COMPILER": "g++$env{clang_compiler_version}"
+				"CMAKE_C_COMPILER": "gcc$env{gcc_compiler_version}",
+				"CMAKE_CXX_COMPILER": "g++$env{gcc_compiler_version}"
 			}
 		}
 	],

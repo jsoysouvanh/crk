@@ -49,7 +49,7 @@ jobs:
       - name: Generate Project
         run: |
           cmake --list-presets=all
-          cmake --preset="Clang" -DCRK_MIN_CXX_STD_VERSION=${{matrix.cpp_version}} -DCRK_DEV=1
+          cmake --preset="Clang" -DCRK_MIN_CXX_STD_VERSION=${{ matrix.cpp_version }} -DCRK_DEV=1
 
       - name: Build crk
         run: cmake --build --preset="Clang ${{ matrix.build_config }}"
@@ -75,6 +75,9 @@ jobs:
           - gcc_version: 9
             cpp_version: 20
 
+    env:
+      gcc_compiler_version: -${{ matrix.gcc_version }}
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -92,17 +95,11 @@ jobs:
         with:
           cmake-version: '3.21.0'
 
-      - name: Setup Compiler
-        run: |
-          echo "CC=gcc-${{ matrix.gcc_version }}" >> $GITHUB_ENV
-          echo "CXX=g++-${{ matrix.gcc_version }}" >> $GITHUB_ENV
-
       - name: Generate Project
-        run: cmake -B Build/${{ matrix.build_config }} -DCMAKE_BUILD_TYPE=${{ matrix.build_config }} -DCRK_MIN_CXX_STD_VERSION=${{matrix.cpp_version}} -DCRK_DEV=1 -G "Ninja"
+        run: cmake --preset="GCC" -DCRK_MIN_CXX_STD_VERSION=${{ matrix.cpp_version }} -DCRK_DEV=1
 
       - name: Build crk
-        run: cmake --build Build/${{ matrix.build_config }} --config ${{ matrix.build_config }} --verbose
+        run: cmake --build --preset="GCC ${{ matrix.build_config }}"
 
       - name: Run Tests
-        run: |
-          cd Build/${{ matrix.build_config }} && ctest -C ${{ matrix.build_config }} -V
+        run: ctest --preset="GCC ${{ matrix.build_config }}"
