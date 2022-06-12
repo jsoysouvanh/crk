@@ -27,7 +27,7 @@ jobs:
           submodules: 'recursive'
 
       - name: Generate Project
-        run: cmake --preset="MSVC" -DCRK_MIN_CXX_STD_VERSION=${{matrix.cpp_version}} -DCRK_DEV=1 -A ${{ matrix.target_architecture }} -T ${{ matrix.msvc_toolset }}
+        run: cmake --preset="MSVC" -A ${{ matrix.target_architecture }} -T ${{ matrix.msvc_toolset }} -DCRK_MIN_CXX_STD_VERSION=${{matrix.cpp_version}} -DCRK_DEV=1
 
       - name: Build crk
         run: cmake --build --preset="MSVC ${{ matrix.build_config }}"
