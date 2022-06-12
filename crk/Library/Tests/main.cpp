@@ -11,5 +11,9 @@ int main()
 	else if constexpr (crk::getNativeEndianness() == crk::EEndianness::Mixed)
 		std::cout << "Mixed endian" << std::endl;
 
+#if defined(_MSC_VER)
+	std::cout << "MSVC version: " << _MSC_VER << std::endl;
+#endif
+
 	return EXIT_SUCCESS;
 }

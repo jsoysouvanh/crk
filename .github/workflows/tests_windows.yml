@@ -16,6 +16,8 @@ jobs:
       fail-fast: false
       matrix:
         build_config: [Release, Debug]
+        msvc_toolset: [v141, v142]
+        target_architecture: [x64] #x86
         cpp_version: [17, 20]
 
     steps:
@@ -25,10 +27,10 @@ jobs:
           submodules: 'recursive'
 
       - name: Generate Project
-        run: cmake -B Build/${{ matrix.build_config }} -DCMAKE_BUILD_TYPE=${{ matrix.build_config }} -DCRK_MIN_CXX_STD_VERSION=${{matrix.cpp_version}} -DCRK_DEV=1 -G "Visual Studio 16 2019" -A x64
+        run: cmake --preset="MSVC" -DCRK_MIN_CXX_STD_VERSION=${{matrix.cpp_version}} -DCRK_DEV=1 -A ${{ matrix.target_architecture }} -T ${{ matrix.msvc_toolset }}
 
       - name: Build crk
-        run: cmake --build Build/${{ matrix.build_config }} --config ${{ matrix.build_config }} --verbose
+        run: cmake --build --preset="MSVC ${{ matrix.build_config }}"
 
       - name: Run Tests
-        run: cd Build/${{ matrix.build_config }} && ctest -C ${{ matrix.build_config }} -V
+        run: ctest --preset="MSVC ${{ matrix.build_config }}"

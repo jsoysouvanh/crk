@@ -19,12 +19,26 @@
 		},
 		{
 			"name": "GCC",
+			"condition": {
+				"type": "notEquals",
+				"lhs": "${hostSystemName}",
+				"rhs": "Windows"
+			},
 			"inherits": "Base",
-			"cacheVariables": 
-			{
+			"cacheVariables": {
 				"CMAKE_C_COMPILER": "gcc$env{gcc_compiler_version}",
 				"CMAKE_CXX_COMPILER": "g++$env{gcc_compiler_version}"
 			}
+		},
+		{
+			"name": "MSVC",
+			"condition": {
+				"type": "equals",
+				"lhs": "${hostSystemName}",
+				"rhs": "Windows"
+			},
+			"inherits": "Base",
+			"generator": "Visual Studio 16 2019"
 		}
 	],
 	"buildPresets": 
@@ -65,6 +79,16 @@
 			"name": "GCC Release",
 			"inherits": "Release",
 			"configurePreset": "GCC"
+		},
+		{
+			"name": "MSVC Debug",
+			"inherits": "Debug",
+			"configurePreset": "MSVC"
+		},
+		{
+			"name": "MSVC Release",
+			"inherits": "Release",
+			"configurePreset": "MSVC"
 		}
 	],
 	"testPresets": [
@@ -106,6 +130,16 @@
 			"name": "GCC Release",
 			"inherits": "Release",
 			"configurePreset": "GCC"
+		},
+		{
+			"name": "MSVC Debug",
+			"inherits": "Debug",
+			"configurePreset": "MSVC"
+		},
+		{
+			"name": "MSVC Release",
+			"inherits": "Release",
+			"configurePreset": "MSVC"
 		}
 	]
 }
