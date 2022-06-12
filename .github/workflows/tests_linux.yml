@@ -96,7 +96,9 @@ jobs:
           cmake-version: '3.21.0'
 
       - name: Generate Project
-        run: cmake --preset="GCC" -DCRK_MIN_CXX_STD_VERSION=${{ matrix.cpp_version }} -DCRK_DEV=1
+        run: |
+          cmake --list-presets=all
+          cmake --preset="GCC" -DCRK_MIN_CXX_STD_VERSION=${{ matrix.cpp_version }} -DCRK_DEV=1
 
       - name: Build crk
         run: cmake --build --preset="GCC ${{ matrix.build_config }}"
