@@ -12,16 +12,17 @@ jobs:
     
     strategy:
       matrix:
-        build_config: [Release, Debug]
+        build_config: [Release] #, Debug
         clang_version: [12]
-        cpp_version: [17, 20]
-        arch: [s390x]
+        cpp_version: [17] #, 20
+        arch: [aarch64]
         distro: [ubuntu20.04]
 
     steps:
       - uses: actions/checkout@v2.1.0
       - uses: uraimo/run-on-arch-action@v2
         name: Build artifact
+        id: build
         with:
           arch: ${{ matrix.arch }}
           distro: ${{ matrix.distro }}
