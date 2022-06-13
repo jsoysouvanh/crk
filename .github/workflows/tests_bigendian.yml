@@ -24,8 +24,8 @@ jobs:
         name: Build artifact
         id: build
         with:
-          arch: ${{ matrix.arch }}
-          distro: ${{ matrix.distro }}
+          arch: armv7
+          distro: ubuntu18.04
 
           # Speeds up builds by caching container image
           githubToken: ${{ github.token }}
