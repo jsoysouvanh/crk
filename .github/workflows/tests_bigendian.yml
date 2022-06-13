@@ -11,10 +11,11 @@ jobs:
     runs-on: ubuntu-latest
     
     strategy:
+      fail-fast: false
       matrix:
-        build_config: [Release] #, Debug
-        cpp_version: [17] #, 20
-        arch: [s390x]
+        build_config: [Release, Debug]
+        cpp_version: [17, 20]
+        arch: [armv7, s390x, aarch64, ppc64le]
         distro: [ubuntu_latest]
 
     steps:
@@ -29,18 +30,14 @@ jobs:
           # Speeds up builds by caching container image
           githubToken: ${{ github.token }}
 
-          # Create an artifacts directory
-          setup: |
-            mkdir -p "${PWD}/artifacts"
-
           # Mount the artifacts directory as /artifacts in the container
           dockerRunArgs: |
-            --volume "${PWD}/artifacts:/artifacts"
             --volume "${PWD}:/crk_root"
 
           # Forward matrix variables to the container
           env: |
             build_config: ${{ matrix.build_config }}
+            cpp_version: ${{ matrix.cpp_version }}
 
           # The shell to run commands with in the container
           shell: /bin/sh
@@ -66,6 +63,6 @@ jobs:
             cd /crk_root
 
             cmake --list-presets=all
-            cmake --preset="Clang" -DCRK_MIN_CXX_STD_VERSION=17
+            cmake --preset="Clang" -DCRK_MIN_CXX_STD_VERSION=${cpp_version}
             cmake --build --preset="Clang ${build_config}"
             ctest --preset="Clang ${build_config}"
