@@ -8,7 +8,7 @@ on:
 jobs:
   ubuntu_clang_s390x:
     name: ${{ matrix.distro }} | Clang | ${{ matrix.arch }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18.04
     
     strategy:
       matrix:
