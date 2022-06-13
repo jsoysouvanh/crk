@@ -64,36 +64,8 @@ jobs:
 
           run: |
             cd /crk_root
-            apt-get install tree
-            tree
 
-  #armv7_job:
-  #  # The host should always be Linux
-  #  runs-on: ubuntu-18.04
-  #  name: Build on ubuntu-18.04 armv7
-  #  steps:
-  #    - uses: actions/checkout@v2.1.0
-  #    - uses: uraimo/run-on-arch-action@v2
-  #      name: Run commands
-  #      id: runcmd
-  #      with:
-  #        arch: armv7
-  #        distro: ubuntu18.04
-
-  #        # Not required, but speeds up builds by storing container images in
-  #        # a GitHub package registry.
-  #        githubToken: ${{ github.token }}
-
-  #        # Set an output parameter `uname` for use in subsequent steps
-  #        run: |
-  #          uname -a
-  #          echo ::set-output name=uname::$(uname -a)
-
-  #    - name: Get the output
-  #      # Echo the `uname` output parameter from the `runcmd` step
-  #      run: |
-  #        echo "The uname output was ${{ steps.runcmd.outputs.uname }}"
-
-
-#/home/runner/work/_actions/uraimo/run-on-arch-action/v2/src/run-on-arch.sh /home/runner/work/_actions/uraimo/run-on-arch-action/v2/Dockerfiles/Dockerfile.armv7.ubuntu18.04 run-on-arch-jsoysouvanh-crk-big-endian-linux-armv7-ubuntu18-04
-#/home/runner/work/_actions/uraimo/run-on-arch-action/v2/src/run-on-arch.sh /home/runner/work/_actions/uraimo/run-on-arch-action/v2/Dockerfiles/Dockerfile.armv7.ubuntu18.04 run-on-arch-jsoysouvanh-crk-big-endian-linux-armv7-ubuntu18-04 --volume ${PWD}/artifacts:/artifacts --volume ${PWD}:/crk_root -ebuild_config -eclang_version -ecpp_version
+            cmake --list-presets=all
+            cmake --preset="Clang" -DCRK_MIN_CXX_STD_VERSION=17 -DCRK_DEV=1
+            cmake --build --preset="Clang ${build_config}"
+            ctest --preset="Clang ${build_config}"
