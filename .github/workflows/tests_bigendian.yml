@@ -31,19 +31,19 @@ jobs:
           githubToken: ${{ github.token }}
 
           # Create an artifacts directory
-          setup: |
-            mkdir -p "${PWD}/artifacts"
+#          setup: |
+#            mkdir -p "${PWD}/artifacts"
 
           # Mount the artifacts directory as /artifacts in the container
-          dockerRunArgs: |
-            --volume "${PWD}/artifacts:/artifacts"
-            --volume "${PWD}:/crk_root"
+#          dockerRunArgs: |
+#            --volume "${PWD}/artifacts:/artifacts"
+#            --volume "${PWD}:/crk_root"
 
           # Forward matrix variables to the container
-          env: |
-            build_config: ${{ matrix.build_config }}
-            clang_version: ${{ matrix.clang_version }}
-            cpp_version: ${{ matrix.cpp_version }}
+#          env: |
+#            build_config: ${{ matrix.build_config }}
+#            clang_version: ${{ matrix.clang_version }}
+#            cpp_version: ${{ matrix.cpp_version }}
 
           # The shell to run commands with in the container
           shell: /bin/sh
@@ -99,3 +99,7 @@ jobs:
   #      # Echo the `uname` output parameter from the `runcmd` step
   #      run: |
   #        echo "The uname output was ${{ steps.runcmd.outputs.uname }}"
+
+
+#/home/runner/work/_actions/uraimo/run-on-arch-action/v2/src/run-on-arch.sh /home/runner/work/_actions/uraimo/run-on-arch-action/v2/Dockerfiles/Dockerfile.armv7.ubuntu18.04 run-on-arch-jsoysouvanh-crk-big-endian-linux-armv7-ubuntu18-04
+#/home/runner/work/_actions/uraimo/run-on-arch-action/v2/src/run-on-arch.sh /home/runner/work/_actions/uraimo/run-on-arch-action/v2/Dockerfiles/Dockerfile.armv7.ubuntu18.04 run-on-arch-jsoysouvanh-crk-big-endian-linux-armv7-ubuntu18-04 --volume ${PWD}/artifacts:/artifacts --volume ${PWD}:/crk_root -ebuild_config -eclang_version -ecpp_version
