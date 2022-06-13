@@ -52,7 +52,7 @@ jobs:
         run: ctest --preset="GCC ${{ matrix.build_config }}"
 
       - name: Generate post-test coverage report
-        run: lcov lcov --no-external --capture --directory "Build/GCC" --output-file posttest_coverage.info
+        run: lcov --no-external --capture --directory "Build/GCC" --output-file posttest_coverage.info
         
       - name: Merge coverage reports
         run: lcov --add-tracefile pretest_coverage.info --add-tracefile posttest_coverage.info --output-file coverage.info
