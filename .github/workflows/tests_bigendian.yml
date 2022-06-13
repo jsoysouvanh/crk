@@ -13,7 +13,6 @@ jobs:
     strategy:
       matrix:
         build_config: [Release] #, Debug
-        clang_version: [12]
         cpp_version: [17] #, 20
         arch: [s390x]
         distro: [ubuntu_latest]
@@ -42,8 +41,6 @@ jobs:
           # Forward matrix variables to the container
           env: |
             build_config: ${{ matrix.build_config }}
-            clang_version: ${{ matrix.clang_version }}
-            cpp_version: ${{ matrix.cpp_version }}
 
           # The shell to run commands with in the container
           shell: /bin/sh
@@ -57,7 +54,7 @@ jobs:
           install: |
             apt-get update -q -y
 
-            apt-get install -y software-properties-common lsb-release git ninja-build clang++-${clang_version}
+            apt-get install -y software-properties-common lsb-release git ninja-build clang++-12
             
             #wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | gpg --dearmor - | tee /etc/apt/trusted.gpg.d/kitware.gpg >/dev/null
             #apt-add-repository "deb https://apt.kitware.com/ubuntu/ $(lsb_release -cs) main"
