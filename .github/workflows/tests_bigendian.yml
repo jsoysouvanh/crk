@@ -46,7 +46,7 @@ jobs:
             cpp_version: ${{ matrix.cpp_version }}
 
           # The shell to run commands with in the container
-#          shell: /bin/sh
+          shell: /bin/sh
 
           # Install some dependencies in the container. This speeds up builds if
           # you are also using githubToken. Any dependencies installed here will
@@ -54,19 +54,19 @@ jobs:
           # builds don't have to re-install them. The image layer is cached
           # publicly in your project's package repository, so it is vital that
           # no secrets are present in the container state or logs.
-          #install: |
-          #  sudo apt-get update -q -y
+          install: |
+            apt-get update -q -y
 
-          #  sudo apt-get install -y git
-          #  sudo apt-get install ninja-build
+            apt-get install -y git
+            apt-get install ninja-build
             
-          #  sudo apt purge --auto-remove cmake
-          #  wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | gpg --dearmor - | sudo tee /etc/apt/trusted.gpg.d/kitware.gpg >/dev/null
-          #  sudo apt-add-repository "deb https://apt.kitware.com/ubuntu/ $(lsb_release -cs) main"
-          #  sudo apt update
-          #  sudo apt install cmake
+            apt purge --auto-remove cmake
+            wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | gpg --dearmor - | sudo tee /etc/apt/trusted.gpg.d/kitware.gpg >/dev/null
+            apt-add-repository "deb https://apt.kitware.com/ubuntu/ $(lsb_release -cs) main"
+            apt update
+            apt install cmake
 
-          #  sudo apt-get install clang++-${ clang_version }
+            apt-get install clang++-${ clang_version }
 
           run: |
             cd /crk_root
