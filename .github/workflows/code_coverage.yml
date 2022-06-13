@@ -44,19 +44,13 @@ jobs:
 
       - name: Build crk
         run: cmake --build --preset="GCC ${{ matrix.build_config }}" --target crkTests
-
-      - name: Generate pre-test coverage report
-        run: lcov --no-external --capture --initial --directory "Build/GCC" --output-file pretest_coverage.info
-
+        
       - name: Run Tests
         run: ctest --preset="GCC ${{ matrix.build_config }}"
 
-      - name: Generate post-test coverage report
-        run: lcov --no-external --capture --directory "Build/GCC" --output-file posttest_coverage.info
+      - name: Generate coverage report
+        run: lcov --no-external --capture --directory "Build/GCC" --output-file coverage.info
         
-      - name: Merge coverage reports
-        run: lcov --add-tracefile pretest_coverage.info --add-tracefile posttest_coverage.info --output-file coverage.info
-
       - name: Upload coverage to codecov
         uses: codecov/codecov-action@v2
         with:
