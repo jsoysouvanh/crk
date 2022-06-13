@@ -105,3 +105,69 @@ jobs:
 
       - name: Run Tests
         run: ctest --preset="GCC ${{ matrix.build_config }}"
+
+  ubuntu_clang_s390x:
+    name: ${{ matrix.distro }} | Clang | ${{ matrix.arch }}
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        build_config: [Release, Debug]
+        clang_version: [12]
+        cpp_version: [17, 20]
+        arch: [s390x]
+        distro: [ubuntu_latest]
+
+    steps:
+      - uses: actions/checkout@v2.1.0
+      - uses: uraimo/run-on-arch-action@v2
+        name: Build artifact
+        with:
+          arch: ${{ matrix.arch }}
+          distro: ${{ matrix.distro }}
+
+          # Speeds up builds by caching container image
+          githubToken: ${{ github.token }}
+
+          # Create an artifacts directory
+          setup: |
+            mkdir -p "${PWD}/artifacts"
+
+          # Mount the artifacts directory as /artifacts in the container
+          dockerRunArgs: |
+            --volume "${PWD}/artifacts:/artifacts"
+            --volume "${PWD}:/crk_root"
+
+          # Forward matrix variables to the container
+          env: |
+            build_config: ${{ matrix.build_config }}
+            clang_version: ${{ matrix.clang_version }}
+            cpp_version: ${{ matrix.cpp_version }}
+
+          # The shell to run commands with in the container
+          shell: /bin/sh
+
+          # Install some dependencies in the container. This speeds up builds if
+          # you are also using githubToken. Any dependencies installed here will
+          # be part of the container image that gets cached, so subsequent
+          # builds don't have to re-install them. The image layer is cached
+          # publicly in your project's package repository, so it is vital that
+          # no secrets are present in the container state or logs.
+          install: |
+            sudo apt-get update -q -y
+
+            sudo apt-get install -y git
+            sudo apt-get install ninja-build
+            
+            sudo apt purge --auto-remove cmake
+            wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | gpg --dearmor - | sudo tee /etc/apt/trusted.gpg.d/kitware.gpg >/dev/null
+            sudo apt-add-repository "deb https://apt.kitware.com/ubuntu/ $(lsb_release -cs) main"
+            sudo apt update
+            sudo apt install cmake
+
+            sudo apt-get install clang++-${ clang_version }
+
+          run: |
+            cd /crk_root
+            sudo apt-get install tree
+            tree
