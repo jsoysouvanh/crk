@@ -66,6 +66,6 @@ jobs:
             cd /crk_root
 
             cmake --list-presets=all
-            cmake --preset="Clang" -DCRK_MIN_CXX_STD_VERSION=17 -DCRK_DEV=1
+            cmake --preset="Clang" -DCRK_MIN_CXX_STD_VERSION=17
             cmake --build --preset="Clang ${build_config}"
             ctest --preset="Clang ${build_config}"
