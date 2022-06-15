@@ -30,7 +30,7 @@
 #if __cplusplus >= 202002L
 	#define CRK_CPP20_SUPPORT 1
 #else
-	#define CRK_CPP20_SUPPORT 0
+	#define CRK_CPP20 0
 #endif
 
 //Attributes

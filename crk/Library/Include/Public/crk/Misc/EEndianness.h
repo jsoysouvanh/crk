@@ -7,13 +7,9 @@
 
 #pragma once
 
-#include "Config.h"
-
 #include <cstdint> //uint8_t
 
-#if CRK_CPP20_SUPPORT
-#include <bit> //std::endian
-#endif
+#include "crk/Misc/EnumMacros.h"
 
 namespace crk
 {
@@ -36,13 +32,8 @@ namespace crk
 		*	Mixed endian (bytes in 16-bit words are laid out in a little-endian fashion,
 		*	whereas the 16-bit subwords of a 32-bit quantity are laid out in big-endian fashion).
 		*/
-		Mixed
+		Mixed	= 2u
 	};
 
-	/**
-	*	@brief Get the endianness of the 
-	*/
-	CRK_NODISCARD constexpr EEndianness getNativeEndianness() noexcept;
-
-	#include "Misc/Endianness.inl"
+	CRK_GENERATE_ENUM_OPERATORS(EEndianness)
 }

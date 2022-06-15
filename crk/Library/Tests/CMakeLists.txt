@@ -3,14 +3,9 @@ cmake_minimum_required(VERSION 3.13.5)
 project(RefurekuTests)
 
 ###########################################
-#		Configure the tests
+#		        Fetch GTest
 ###########################################
 
-set(crkTestsTarget crkTests)
-add_executable(${crkTestsTarget}
-					"main.cpp")
-
-# Fetch GTest
 include(FetchContent)
 
 FetchContent_Declare(
@@ -22,21 +17,36 @@ FetchContent_Declare(
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
+###########################################
+#		Configure the tests
+###########################################
+
+set(crkWriteToArchiveTestsTarget crkWriteToArchiveTests)
+add_executable(${crkWriteToArchiveTestsTarget} "WriteToArchive.cpp")
+
+set(crkReadFromArchiveTestsTarget crkReadFromArchiveTests)
+add_executable(${crkReadFromArchiveTestsTarget} "ReadFromArchive.cpp")
+
 # Link libraries
-target_link_libraries(${crkTestsTarget} PUBLIC gtest)
+target_link_libraries(${crkWriteToArchiveTestsTarget} PUBLIC gtest)
+target_link_libraries(${crkReadFromArchiveTestsTarget} PUBLIC gtest)
 
 # Add include directories
-target_include_directories(${crkTestsTarget} PRIVATE Include)
+target_include_directories(${crkWriteToArchiveTestsTarget} PRIVATE Include)
+target_include_directories(${crkReadFromArchiveTestsTarget} PRIVATE Include)
 
 #refureku_setup_target(
 #	TARGET ${RefurekuTestsTarget}
 #	RFK_SETTINGS_FILENAME "RefurekuTestsSettings.toml"
 #)
 
-target_link_libraries(${crkTestsTarget} PUBLIC crk)
+target_link_libraries(${crkWriteToArchiveTestsTarget} PUBLIC crk)
+target_link_libraries(${crkReadFromArchiveTestsTarget} PUBLIC crk)
 
 if (MSVC)
-	target_compile_options(${crkTestsTarget} PRIVATE /MP /bigobj)
+	target_compile_options(${crkWriteToArchiveTestsTarget} PRIVATE /MP /bigobj)
+	target_compile_options(${crkReadFromArchiveTestsTarget} PRIVATE /MP /bigobj)
 endif()
 
-add_test(NAME ${crkTestsTarget} COMMAND ${crkTestsTarget})
+add_test(NAME ${crkWriteToArchiveTestsTarget} COMMAND ${crkWriteToArchiveTestsTarget})
+add_test(NAME ${crkReadFromArchiveTestsTarget} COMMAND ${crkReadFromArchiveTestsTarget})

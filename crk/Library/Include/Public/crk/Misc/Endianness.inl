@@ -5,10 +5,10 @@
 *	See the LICENSE.md file for full license details.
 */
 
-constexpr EEndianness getNativeEndianness() noexcept
+constexpr EEndianness Endianness::getNativeEndianness() noexcept
 {
 	//Get endianness from the standard if possible (C++20+)
-#if CRK_CPP20_SUPPORT
+#if CRK_CPP20
 	if constexpr (std::endian::native == std::endian::little)
 	{
 		return EEndianness::Little;
