@@ -21,18 +21,24 @@ namespace crk
 		/**
 		*	Little endian (least significant byte of a word first).
 		*/
-		Little	= 0u,
+		Little	= 1u << 0,
 
 		/**
 		*	Big endian (most significant byte of a word first).
 		*/
-		Big		= 1u,
+		Big		= 1u << 1,
 
 		/**
 		*	Mixed endian (bytes in 16-bit words are laid out in a little-endian fashion,
 		*	whereas the 16-bit subwords of a 32-bit quantity are laid out in big-endian fashion).
+		*	This was used by old machines such as PDP-11 (1970~) or Honeywell 316 (1969~).
 		*/
-		Mixed	= 2u
+		Mixed	= 1u << 2,
+
+		/**
+		*	Any endianness which is none of the above.
+		*/
+		Unknown	= 1u << 7
 	};
 
 	CRK_GENERATE_ENUM_OPERATORS(EEndianness)

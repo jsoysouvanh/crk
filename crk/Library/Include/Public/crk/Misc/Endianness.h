@@ -9,12 +9,22 @@
 
 #include "crk/Config.h"
 
-#if defined(_WIN32)
-#include "intrin.h"	//_byteswap_ushort, _byteswap_ulong, _byteswap_uint64
-#endif
+#include <cstring>		//std::memcpy
+#include <type_traits>	//std::enable_if, std::is_arithmetic
+#include <cstdlib>	//builtin bswaps for both MSVC (_byteswap_ushort...) and GNU compilers (__builtin_bswap16...)
 
 #if CRK_CPP20
-#include <bit> //std::endian
+	#include <bit> //std::endian
+#elif defined(__has_include)
+	#if __has_include(<endian.h>)
+		#include <endian.h>			//GNU, Linux
+	#elif __has_include(<machine/endian.h>)
+		#include <machine/endian.h> //OpenBSD, MacOS
+	#elif __has_include(<sys/param.h>)
+		#include <sys/param.h>		//MINGW, some BSD
+	#elif __has_include(<sys/isadefs.h>)
+		#include <sys/isadefs.h>	//Solaris
+	#endif
 #endif
 
 #include "crk/Misc/EEndianness.h"
@@ -27,23 +37,118 @@ namespace crk
 	class Endianness
 	{
 		private:
+			/**
+			*	@brief Check if the specified endiannesses are Little & Big regardless of the conversion order.
+			* 
+			*	@tparam SourceEndianness Source endianness.
+			*	@tparam TargetEndianness Target endianness.
+			* 
+			*	@return true if (SourceEndianness, TargetEndianness) is (Big, Little) or (Little, Big), else false.
+			*/
 			template <EEndianness SourceEndianness, EEndianness TargetEndianness>
-			_NODISCARD static constexpr bool isLittleBigConversion() noexcept
-			{
-				return (SourceEndianness | TargetEndianness) == (EEndianness::Little | EEndianness::Big);
-			}
+			CRK_NODISCARD static constexpr bool		isLittleBigConversion()			noexcept;
 
+			/**
+			*	@brief Check if the specified endiannesses are Little & Mixed regardless of the conversion order.
+			* 
+			*	@tparam SourceEndianness Source endianness.
+			*	@tparam TargetEndianness Target endianness.
+			* 
+			*	@return true if (SourceEndianness, TargetEndianness) is (Little, Mixed) or (Mixed, Little), else false.
+			*/
 			template <EEndianness SourceEndianness, EEndianness TargetEndianness>
-			_NODISCARD static constexpr bool isLittleMixedConversion() noexcept
-			{
-				return (SourceEndianness | TargetEndianness) == (EEndianness::Little | EEndianness::Mixed);
-			}
+			CRK_NODISCARD static constexpr bool		isLittleMixedConversion()		noexcept;
 
+			/**
+			*	@brief Check if the specified endiannesses are Big & Mixed regardless of the conversion order.
+			* 
+			*	@tparam SourceEndianness Source endianness.
+			*	@tparam TargetEndianness Target endianness.
+			* 
+			*	@return true if (SourceEndianness, TargetEndianness) is (Big, Mixed) or (Mixed, Big), else false.
+			*/
 			template <EEndianness SourceEndianness, EEndianness TargetEndianness>
-			_NODISCARD static constexpr bool isBigMixedConversion() noexcept
-			{
-				return (SourceEndianness | TargetEndianness) == (EEndianness::Big | EEndianness::Mixed);
-			}
+			CRK_NODISCARD static constexpr bool		isBigMixedConversion()			noexcept;
+
+			/**
+			*	@brief Check if one of the provided endiannesses is Unknown.
+			* 
+			*	@tparam SourceEndianness Source endianness.
+			*	@tparam TargetEndianness Target endianness.
+			* 
+			*	@return true if SourceEndianness or TargetEndianness is Unknown, else false.
+			*/
+			template <EEndianness SourceEndianness, EEndianness TargetEndianness>
+			CRK_NODISCARD static constexpr bool		isUnknownConversion()			noexcept;
+			
+			/**
+			*	@brief Bitshift implementation of bswap16.
+			* 
+			*	@param v 16-bit unsigned integer to byteswap.
+			*
+			*	@return The byte-swapped 16-bit unsigned integer.
+			*/
+			CRK_NODISCARD static constexpr uint16_t	bitshiftByteSwap16(uint16_t v)	noexcept;
+
+			/**
+			*	@brief Bitshift implementation of bswap32.
+			* 
+			*	@param v 32-bit unsigned integer to byteswap.
+			*
+			*	@return The byte-swapped 32-bit unsigned integer.
+			*/
+			CRK_NODISCARD static constexpr uint32_t	bitshiftByteSwap32(uint32_t v)	noexcept;
+
+			/**
+			*	@brief Bitshift implementation of bswap64.
+			* 
+			*	@param v 64-bit unsigned integer to byteswap.
+			*
+			*	@return The byte-swapped 64-bit unsigned integer.
+			*/
+			CRK_NODISCARD static constexpr uint64_t	bitshiftByteSwap64(uint64_t v)	noexcept;
+
+			/**
+			*	@brief	Optimized implementation of bswap16.
+			*			Use the builtin instruction if available, and fallbacks to the bitshift implementation otherwise.
+			* 
+			*	@param v 16-bit unsigned integer to byteswap.
+			*
+			*	@return The byte-swapped 16-bit unsigned integer.
+			*/
+			CRK_NODISCARD static inline uint16_t	byteSwap16(uint16_t v)			noexcept;
+
+			/**
+			*	@brief	Optimized implementation of bswap32.
+			*			Use the builtin instruction if available, and fallbacks to the bitshift implementation otherwise.
+			* 
+			*	@param v 32-bit unsigned integer to byteswap.
+			*
+			*	@return The byte-swapped 32-bit unsigned integer.
+			*/
+			CRK_NODISCARD static inline uint32_t	byteSwap32(uint32_t v)			noexcept;
+
+			/**
+			*	@brief	Optimized implementation of bswap64.
+			*			Use the builtin instruction if available, and fallbacks to the bitshift implementation otherwise.
+			* 
+			*	@param v 64-bit unsigned integer to byteswap.
+			*
+			*	@return The byte-swapped 64-bit unsigned integer.
+			*/
+			CRK_NODISCARD static inline uint64_t	byteSwap64(uint64_t v)			noexcept;
+
+			/**
+			*	@brief Byte-swap object of arbitrary type T.
+			* 
+			*	@tparam T Type of the object to byteswap.
+			* 
+			*	@param v Object to byteswap.
+			* 
+			*	@return The byte-swapped object.
+			*/
+			template <typename T>
+			CRK_NODISCARD static T					byteSwapN(T v)					noexcept;
 
 		public:
 			Endianness() = delete;
@@ -53,43 +158,21 @@ namespace crk
 			* 
 			*	@return The endianness used by the compiled program.
 			*/
-			CRK_NODISCARD static constexpr EEndianness getNativeEndianness() noexcept;
+			CRK_NODISCARD static constexpr EEndianness	getNativeEndianness()	noexcept;
 
-			///////// TODO: Move impl to .inl + doc //////////
-			template <EEndianness SourceEndianness, EEndianness TargetEndianness>
-			_NODISCARD static uint8_t convertEndianness(uint8_t v) noexcept
-			{
-				//No conversion necessary for 8 bits values
-				return v;
-			}
-
-			template <EEndianness SourceEndianness, EEndianness TargetEndianness>
-			_NODISCARD static uint16_t convertEndianness(uint16_t v) noexcept
-			{
-				if constexpr (SourceEndianness != TargetEndianness)
-				{
-#if defined(_WIN32)
-					if constexpr (isLittleBigConversion<SourceEndianness, TargetEndianness>())
-					{
-						return _byteswap_ushort(v);
-					}
-					else
-					{
-						//Not supported yet
-					}
-#elif defined(GCC)
-					//TODO
-					return v;
-#else
-					//TODO: Call generic (unoptimized) bytes swap
-					return v;
-#endif
-				}
-				else
-				{
-					return v;
-				}
-			}
+			/**
+			*	@brief Convert an arithmetic object to a specific endianness.
+			* 
+			*	@tparam SourceEndianness	Source endianness.
+			*	@tparam TargetEndianness	Target endianness.
+			*	@tparam T					Type of the object to convert.
+			* 
+			*	@param v Object to convert.
+			* 
+			*	@return The object converted to the specific endianness.
+			*/
+			template <EEndianness SourceEndianness, EEndianness TargetEndianness, typename T, typename = std::enable_if_t<std::is_arithmetic_v<T>>>
+			CRK_NODISCARD static T						convert(T v)			noexcept;
 	};
 
 	#include "crk/Misc/Endianness.inl"

@@ -10,7 +10,7 @@ int main(int argc, char** argv)
 
 	crk::OutBinaryArchive<256> archive;
 
-	archive(1, 2, 3, 4, 5);
+	archive((uint8_t)1, (uint16_t)2, (uint32_t)3, (uint64_t)4, (float)5, (double)6);
 
 	archive.finish();
 

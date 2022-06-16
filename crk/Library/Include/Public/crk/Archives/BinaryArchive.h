@@ -19,7 +19,7 @@
 #include <cstddef>		//std::byte
 #include <cstring>		//std::memcpy
 #include <utility>		//std::forward
-#include <type_traits>	//std::is_integral_v, std::enable_if_t...
+#include <type_traits>	//std::is_arithmetic_v, std::enable_if_t...
 
 #include <fstream>		//std::ofstream
 #include <filesystem>	//std::filesystem::path
@@ -200,9 +200,11 @@ namespace crk
 	};
 
 
-	template <typename T, std::size_t Size, EEndianness Endianness, typename = std::enable_if_t<std::is_integral_v<T>>>
+	template <typename T, std::size_t Size, EEndianness Endianness, typename = std::enable_if_t<std::is_arithmetic_v<T>>>
 	void serialize(OutBinaryArchive<Size, Endianness>& archive, T const& object)
 	{
-		archive.appendBinaryChunk(reinterpret_cast<std::byte const*>(std::addressof(object)), sizeof(T));
+		T endiannessSwappedObject = Endianness::convert<Endianness::getNativeEndianness(), Endianness>(object);
+
+		archive.appendBinaryChunk(reinterpret_cast<std::byte const*>(std::addressof(endiannessSwappedObject)), sizeof(T));
 	}
 }

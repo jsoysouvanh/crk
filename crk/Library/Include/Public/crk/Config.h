@@ -16,21 +16,47 @@
 //Debug / Release flags
 #ifndef NDEBUG
 
-#define CRK_DEBUG	1
-#define CRK_RELEASE	0
+	#define CRK_DEBUG	1
+	#define CRK_RELEASE	0
 
 #else	//RELEASE
 
-#define CRK_DEBUG	0
-#define CRK_RELEASE	1
+	#define CRK_DEBUG	0
+	#define CRK_RELEASE	1
 
 #endif
 
 //C++ version
 #if __cplusplus >= 202002L
-	#define CRK_CPP20_SUPPORT 1
-#else
-	#define CRK_CPP20 0
+	#define CRK_CPP20 1
+#elif __cplusplus >= 201703L
+	#define CRK_CPP17 1
+#endif
+
+//Compiler
+#if defined(__INTEL_COMPILER)
+	#define CRK_INTEL_COMPILER	1
+#elif defined(__clang__)
+	#define CRK_CLANG_COMPILER	1
+#elif defined(__GNUC__)
+	#define CRK_GCC_COMPILER	1
+#elif defined(_MSC_VER)
+	#define CRK_MSVC_COMPILER	1
+#endif
+
+//OS
+#if defined(_WIN64)
+	#define CRK_WINDOWS_OS		1
+	#define CRK_WINDOWS_64_OS	1
+#elif defined(_WIN32)
+	#define CRK_WINDOWS_OS		1
+	#define CRK_WINDOWS_32_OS	1
+#elif defined(__linux__)
+	#define CRK_LINUX_OS		1
+#elif defined(__APPLE__) && defined(__MACH__)
+	#define CRK_MACOSX_OS		1
+#elif defined(__ANDROID__)
+	#define CRK_ANDROID_OS		1
 #endif
 
 //Attributes
