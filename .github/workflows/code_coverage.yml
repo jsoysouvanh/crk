@@ -43,7 +43,7 @@ jobs:
         run: cmake --preset="GCC" -DCRK_GEN_CODECOV_REPORT=1
 
       - name: Build crk
-        run: cmake --build --preset="GCC ${{ matrix.build_config }}" --target crkTests
+        run: cmake --build --preset="GCC ${{ matrix.build_config }}"
         
       - name: Run Tests
         run: ctest --preset="GCC ${{ matrix.build_config }}"

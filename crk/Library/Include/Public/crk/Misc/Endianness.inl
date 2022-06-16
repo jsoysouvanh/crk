@@ -100,7 +100,7 @@ inline uint64_t Endianness::byteSwap64(uint64_t v) noexcept
 }
 
 template <typename T>
-T Endianness::byteSwapN(T v) noexcept
+T Endianness::byteSwap(T v) noexcept
 {
 	if constexpr (sizeof(T) == 1u)			//8 bits
 	{
@@ -283,7 +283,7 @@ T Endianness::convert(T v) noexcept
 	}
 	else if constexpr (isLittleBigConversion<SourceEndianness, TargetEndianness>())
 	{
-		return byteSwapN(v);
+		return byteSwap(v);
 	}
 
 	return v;

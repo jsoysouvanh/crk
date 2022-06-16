@@ -148,7 +148,7 @@ namespace crk
 			*	@return The byte-swapped object.
 			*/
 			template <typename T>
-			CRK_NODISCARD static T					byteSwapN(T v)					noexcept;
+			CRK_NODISCARD static T					byteSwap(T v)					noexcept;
 
 		public:
 			Endianness() = delete;
