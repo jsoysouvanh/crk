@@ -49,7 +49,7 @@ jobs:
         run: ctest --preset="GCC ${{ matrix.build_config }}"
 
       - name: Generate coverage report
-        run: lcov --no-external --capture --directory "Build/GCC" --output-file coverage.info
+        run: lcov --capture --directory "Build/GCC" --output-file coverage.info
         
       - name: Upload coverage to codecov
         uses: codecov/codecov-action@v2
