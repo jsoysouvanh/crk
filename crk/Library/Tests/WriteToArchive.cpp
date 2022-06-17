@@ -2,10 +2,9 @@
 #include <filesystem>
 
 #include <gtest/gtest.h>
+#include <crk/Archives/Binary/OutBinaryArchive.h>
 
 #include "TestHelpers/EndiannessHelpers.h"
-
-#include "crk/Archives/BinaryArchive.h"
 
 namespace fs = std::filesystem;
 

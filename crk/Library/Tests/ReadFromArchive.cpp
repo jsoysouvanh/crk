@@ -1,6 +1,7 @@
 #include <filesystem>
 
 #include <gtest/gtest.h>
+#include <crk/Archives/Binary/InBinaryArchive.h>
 
 #include "TestHelpers/EndiannessHelpers.h"
 
@@ -21,6 +22,20 @@ int main(int argc, char** argv)
 			for (auto const& dir_entry : fs::directory_iterator(dir))
 			{
 				std::cout << "Entry: " << dir_entry.path() << std::endl;
+
+				crk::InBinaryArchive<256> archive;
+				archive.loadFromFile(dir_entry.path().string().c_str());
+
+				uint8_t int1;
+				uint16_t int2;
+				uint32_t int3;
+				uint64_t int4;
+				float float1;
+				double double1;
+
+				archive(int1, int2, int3, int4, float1, double1);
+
+				std::cout << (int)int1 << ", " << int2 << ", " << int3 << ", " << int4 << ", " << float1 << ", " << double1 << std::endl;
 			}
 		}
 	}
