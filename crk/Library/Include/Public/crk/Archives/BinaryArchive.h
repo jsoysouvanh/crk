@@ -22,7 +22,6 @@
 #include <type_traits>	//std::is_arithmetic_v, std::enable_if_t...
 
 #include <fstream>		//std::ofstream
-#include <filesystem>	//std::filesystem::path
 
 #include "crk/Archives/ArchiveBase.h"
 #include "crk/Misc/Endianness.h"
@@ -189,11 +188,11 @@ namespace crk
 				//TODO: Write archive footer?
 			}
 
-			void saveToFile(std::filesystem::path const& path)
+			void saveToFile(char const* filepath)
 			{
 				std::ofstream file;
 
-				file.open(path.c_str(), std::ios_base::binary);
+				file.open(filepath, std::ios_base::binary);
 
 				file.write(reinterpret_cast<char const*>(BinaryArchive<Size, Endianness>::_data.data()), getWriteOffset());
 			}

@@ -13,6 +13,8 @@
 
 void printEndianness()
 {
+	std::cout << "Current machine is ";
+
 	if constexpr (crk::Endianness::getNativeEndianness() == crk::EEndianness::Little)
 		std::cout << "Little endian" << std::endl;
 	else if constexpr (crk::Endianness::getNativeEndianness() == crk::EEndianness::Big)

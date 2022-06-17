@@ -48,5 +48,17 @@ if (MSVC)
 	target_compile_options(${crkReadFromArchiveTestsTarget} PRIVATE /MP /bigobj)
 endif()
 
-add_test(NAME ${crkWriteToArchiveTestsTarget} COMMAND ${crkWriteToArchiveTestsTarget})
-add_test(NAME ${crkReadFromArchiveTestsTarget} COMMAND ${crkReadFromArchiveTestsTarget})
+#Setup parameters for tests
+if (NOT CRK_TESTS_OUTPUT_DIR)
+	set(CRK_TESTS_OUTPUT_DIR TestsOutput)
+endif()
+
+if (NOT CRK_TESTS_OUTPUT_FILENAME)
+	set(CRK_TESTS_OUTPUT_FILENAME TestsOutput_${CMAKE_CXX_COMPILER_ID}${CMAKE_CXX_COMPILER_VERSION})
+endif()
+
+add_test(NAME ${crkWriteToArchiveTestsTarget}
+		 COMMAND ${crkWriteToArchiveTestsTarget} ${CRK_TESTS_OUTPUT_FILENAME})
+
+add_test(NAME ${crkReadFromArchiveTestsTarget}
+		 COMMAND ${crkReadFromArchiveTestsTarget} ${CRK_TESTS_OUTPUT_DIR})

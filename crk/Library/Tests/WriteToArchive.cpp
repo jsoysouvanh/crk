@@ -1,9 +1,17 @@
+#include <string>
+#include <filesystem>
+
 #include <gtest/gtest.h>
 
 #include "TestHelpers/EndiannessHelpers.h"
 
 #include "crk/Archives/BinaryArchive.h"
 
+namespace fs = std::filesystem;
+
+/**
+*	1st param -> path to output file
+*/
 int main(int argc, char** argv)
 {
 	printEndianness();
@@ -14,8 +22,9 @@ int main(int argc, char** argv)
 
 	archive.finish();
 
-	archive.saveToFile("binaryTest.bin");
-
+	std::string outputFile = (argc > 1) ? std::string(argv[1]) : "testOutput.bin";
+	archive.saveToFile(outputFile.c_str());
+	std::cout << "Saved file: " << fs::absolute(fs::path(outputFile)) << std::endl;
 
 	::testing::InitGoogleTest(&argc, argv);
 
