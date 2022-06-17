@@ -21,6 +21,9 @@ FetchContent_MakeAvailable(googletest)
 #		Configure the tests
 ###########################################
 
+set(crkEndiannessTestsTarget crkEndiannessTests)
+add_executable(${crkEndiannessTestsTarget} "EndiannessTests.cpp")
+
 set(crkWriteToArchiveTestsTarget crkWriteToArchiveTests)
 add_executable(${crkWriteToArchiveTestsTarget} "WriteToArchive.cpp")
 
@@ -28,10 +31,12 @@ set(crkReadFromArchiveTestsTarget crkReadFromArchiveTests)
 add_executable(${crkReadFromArchiveTestsTarget} "ReadFromArchive.cpp")
 
 # Link libraries
+target_link_libraries(${crkEndiannessTestsTarget} PUBLIC gtest)
 target_link_libraries(${crkWriteToArchiveTestsTarget} PUBLIC gtest)
 target_link_libraries(${crkReadFromArchiveTestsTarget} PUBLIC gtest)
 
 # Add include directories
+target_include_directories(${crkEndiannessTestsTarget} PRIVATE Include)
 target_include_directories(${crkWriteToArchiveTestsTarget} PRIVATE Include)
 target_include_directories(${crkReadFromArchiveTestsTarget} PRIVATE Include)
 
@@ -40,10 +45,12 @@ target_include_directories(${crkReadFromArchiveTestsTarget} PRIVATE Include)
 #	RFK_SETTINGS_FILENAME "RefurekuTestsSettings.toml"
 #)
 
+target_link_libraries(${crkEndiannessTestsTarget} PUBLIC crk)
 target_link_libraries(${crkWriteToArchiveTestsTarget} PUBLIC crk)
 target_link_libraries(${crkReadFromArchiveTestsTarget} PUBLIC crk)
 
 if (MSVC)
+	target_compile_options(${crkEndiannessTestsTarget} PRIVATE /MP /bigobj)
 	target_compile_options(${crkWriteToArchiveTestsTarget} PRIVATE /MP /bigobj)
 	target_compile_options(${crkReadFromArchiveTestsTarget} PRIVATE /MP /bigobj)
 endif()
@@ -56,6 +63,9 @@ endif()
 if (NOT CRK_TESTS_OUTPUT_FILENAME)
 	set(CRK_TESTS_OUTPUT_FILENAME TestsOutput_${CMAKE_CXX_COMPILER_ID}${CMAKE_CXX_COMPILER_VERSION})
 endif()
+
+add_test(NAME ${crkEndiannessTestsTarget}
+		 COMMAND ${crkEndiannessTestsTarget})	#TODO: Pass path to test file
 
 add_test(NAME ${crkWriteToArchiveTestsTarget}
 		 COMMAND ${crkWriteToArchiveTestsTarget} ${CRK_TESTS_OUTPUT_DIR}/${CRK_TESTS_OUTPUT_FILENAME})

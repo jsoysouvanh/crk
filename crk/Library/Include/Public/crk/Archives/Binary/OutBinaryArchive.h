@@ -107,6 +107,8 @@ namespace crk
 				file.open(filepath, std::ios_base::binary);
 
 				file.write(reinterpret_cast<char const*>(BinaryArchive<Size, Endianness>::_data.data()), getWriteOffset());
+
+				file.close();
 			}
 	};
 

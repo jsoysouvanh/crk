@@ -74,7 +74,7 @@ jobs:
       fail-fast: false
       matrix:
         build_config: [Release, Debug]
-        gcc_version: [8, 9, 10, 11]
+        gcc_version: [9, 10, 11]    #8 causes a crash on CI with filesystem related destructor
         cpp_version: [17, 20]
         exclude:
           - gcc_version: 7

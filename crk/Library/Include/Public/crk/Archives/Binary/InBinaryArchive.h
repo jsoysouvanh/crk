@@ -101,6 +101,8 @@ namespace crk
 				file.seekg(0);
 				file.read(reinterpret_cast<char*>(BinaryArchive<Size, Endianness>::_data.data()), fileSize);
 
+				file.close();
+
 				return true;
 			}
 	};
