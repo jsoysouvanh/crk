@@ -22,9 +22,11 @@ int main(int argc, char** argv)
 
 	archive.finish();
 
-	std::string outputFile = (argc > 1) ? std::string(argv[1]) : "testOutput.bin";
-	archive.saveToFile(outputFile.c_str());
-	std::cout << "Saved file: " << fs::absolute(fs::path(outputFile)) << std::endl;
+	fs::path outputFile = fs::absolute((argc > 1) ? std::string(argv[1]) : "testOutput.bin");
+
+	fs::create_directories(outputFile.parent_path());
+	archive.saveToFile(outputFile.string().c_str());
+	std::cout << "Saved file: " << outputFile << std::endl;
 
 	::testing::InitGoogleTest(&argc, argv);
 

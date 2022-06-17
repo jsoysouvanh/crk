@@ -12,11 +12,16 @@ int main(int argc, char** argv)
 
 	if (argc > 1)
 	{
-		std::cout << "Read from directory: " << fs::absolute(argv[1]) << std::endl;
+		fs::path dir = fs::absolute(argv[1]);
 
-		for (auto const& dir_entry : std::filesystem::directory_iterator(argv[1]))
+		if (fs::exists(dir) && fs::is_directory(dir))
 		{
-			std::cout << "Entry: " << dir_entry << std::endl;
+			std::cout << "Read from directory: " << dir << std::endl;
+
+			for (auto const& dir_entry : fs::directory_iterator(dir))
+			{
+				std::cout << "Entry: " << dir_entry.path() << std::endl;
+			}
 		}
 	}
 

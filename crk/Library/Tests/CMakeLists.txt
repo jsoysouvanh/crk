@@ -58,7 +58,7 @@ if (NOT CRK_TESTS_OUTPUT_FILENAME)
 endif()
 
 add_test(NAME ${crkWriteToArchiveTestsTarget}
-		 COMMAND ${crkWriteToArchiveTestsTarget} ${CRK_TESTS_OUTPUT_FILENAME})
+		 COMMAND ${crkWriteToArchiveTestsTarget} ${CRK_TESTS_OUTPUT_DIR}/${CRK_TESTS_OUTPUT_FILENAME})
 
 add_test(NAME ${crkReadFromArchiveTestsTarget}
 		 COMMAND ${crkReadFromArchiveTestsTarget} ${CRK_TESTS_OUTPUT_DIR})

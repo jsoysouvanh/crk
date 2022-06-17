@@ -191,7 +191,6 @@ namespace crk
 			void saveToFile(char const* filepath)
 			{
 				std::ofstream file;
-
 				file.open(filepath, std::ios_base::binary);
 
 				file.write(reinterpret_cast<char const*>(BinaryArchive<Size, Endianness>::_data.data()), getWriteOffset());
