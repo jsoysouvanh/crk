@@ -201,6 +201,7 @@ jobs:
   ubuntu_clang_special_arch_read_tests:
     name: Ubuntu | ${{ matrix.arch }} | Clang | C++${{ matrix.cpp_version }} | ${{ matrix.build_config }}
     runs-on: ubuntu-latest
+    if: ${{ always() }}
     needs: [ubuntu_clang, ubuntu_gcc, ubuntu_clang_special_arch]
     
     strategy:
