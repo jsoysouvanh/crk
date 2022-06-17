@@ -59,6 +59,13 @@ jobs:
           mkdir TestsOutput
           ctest --preset="Clang ${{ matrix.build_config }}"
 
+      - name: Upload Output File(s)
+        uses: actions/upload-artifact@v3
+        with:
+          name: TestsOutput
+          path: ./TestsOutput
+          retention-days: 1
+
   ubuntu_gcc:
     name: Ubuntu | GCC
     runs-on: ubuntu-latest
@@ -109,6 +116,13 @@ jobs:
         run: |
           mkdir TestsOutput
           ctest --preset="GCC ${{ matrix.build_config }}"
+
+      - name: Upload Output File(s)
+        uses: actions/upload-artifact@v3
+        with:
+          name: TestsOutput
+          path: ./TestsOutput
+          retention-days: 1
   
   ubuntu_clang_special_arch:
     name: Ubuntu | ${{ matrix.arch }} | Clang | C++${{ matrix.cpp_version }} | ${{ matrix.build_config }}
@@ -172,8 +186,15 @@ jobs:
             cd /crk_root
 
             cmake --list-presets=all
-            cmake --preset="Clang" -DCRK_MIN_CXX_STD_VERSION=${cpp_version} -DCRK_TESTS_OUTPUT_DIR="${PWD}/TestsOutput" -DCRK_TESTS_OUTPUT_FILENAME="$Clang12_${build_config}_cpp${cpp_version}_${arch}"
+            cmake --preset="Clang" -DCRK_MIN_CXX_STD_VERSION=${cpp_version} -DCRK_TESTS_OUTPUT_DIR="${PWD}/TestsOutput" -DCRK_TESTS_OUTPUT_FILENAME="Clang_${build_config}_cpp${cpp_version}_${arch}"
             cmake --build --preset="Clang ${build_config}"
 
             mkdir TestsOutput
             ctest --preset="Clang ${build_config}"
+
+      - name: Upload Output File(s)
+        uses: actions/upload-artifact@v3
+        with:
+          name: TestsOutput
+          path: ./TestsOutput
+          retention-days: 1
