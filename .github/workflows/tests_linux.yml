@@ -131,10 +131,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        build_config: [Release, Debug]
-        cpp_version: [17, 20]
         arch: [armv7, s390x, aarch64, ppc64le]
         distro: [ubuntu_latest]
+        cpp_version: [17, 20]
+        build_config: [Release, Debug]
 
     steps:
       - name: Checkout repository

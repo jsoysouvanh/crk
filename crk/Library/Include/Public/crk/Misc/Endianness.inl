@@ -123,7 +123,7 @@ T Endianness::byteSwap(T v) noexcept
 		std::memcpy(&v, &tmp, sizeof(uint32_t));
 		return v;
 	}
-	else if constexpr (sizeof(T) == 8u)	//32 bits
+	else if constexpr (sizeof(T) == 8u)		//64 bits
 	{
 		uint64_t tmp;
 		std::memcpy(&tmp, &v, sizeof(uint64_t));

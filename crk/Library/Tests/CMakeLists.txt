@@ -65,7 +65,7 @@ if (NOT CRK_TESTS_OUTPUT_FILENAME)
 endif()
 
 add_test(NAME ${crkEndiannessTestsTarget}
-		 COMMAND ${crkEndiannessTestsTarget})	#TODO: Pass path to test file
+		 COMMAND ${crkEndiannessTestsTarget})
 
 add_test(NAME ${crkWriteToArchiveTestsTarget}
 		 COMMAND ${crkWriteToArchiveTestsTarget} ${CRK_TESTS_OUTPUT_DIR}/${CRK_TESTS_OUTPUT_FILENAME})

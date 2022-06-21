@@ -11,7 +11,7 @@
 
 #include <cstring>		//std::memcpy
 #include <type_traits>	//std::enable_if, std::is_arithmetic
-#include <cstdlib>	//builtin bswaps for both MSVC (_byteswap_ushort...) and GNU compilers (__builtin_bswap16...)
+#include <cstdlib>		//builtin bswaps for both MSVC (_byteswap_ushort...) and GNU compilers (__builtin_bswap16...)
 
 #if CRK_CPP20
 	#include <bit> //std::endian
@@ -165,11 +165,11 @@ namespace crk
 			* 
 			*	@tparam SourceEndianness	Source endianness.
 			*	@tparam TargetEndianness	Target endianness.
-			*	@tparam T					Type of the object to convert.
+			*	@tparam T					Type of the (arithmetic) object to convert.
 			* 
 			*	@param v Object to convert.
 			* 
-			*	@return The object converted to the specific endianness.
+			*	@return The object converted to the specified endianness.
 			*/
 			template <EEndianness SourceEndianness, EEndianness TargetEndianness, typename T, typename = std::enable_if_t<std::is_arithmetic_v<T>>>
 			CRK_NODISCARD static T						convert(T v)			noexcept;
