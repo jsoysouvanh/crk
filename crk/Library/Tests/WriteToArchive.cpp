@@ -5,6 +5,7 @@
 #include <crk/Archives/Binary/OutBinaryArchive.h>
 
 #include "TestHelpers/EndiannessHelpers.h"
+#include "TestHelpers/DataModelHelpers.h"
 #include "TestHelpers/ReadWriteSharedData.h"
 
 namespace fs = std::filesystem;
@@ -66,6 +67,7 @@ void serializeArchiveToFile(fs::path const& filepath)
 int main(int argc, char** argv)
 {
 	printEndianness();
+	printArithmeticTypesSize();
 
 	//Create output directory if it doesn't exist yet
 	fs::path outputFile = (argc > 1) ? fs::absolute(argv[1]) : fs::current_path() / "OutputDir" / "testOutput";

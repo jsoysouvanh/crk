@@ -5,6 +5,7 @@
 #include <crk/Archives/Binary/InBinaryArchive.h>
 
 #include "TestHelpers/EndiannessHelpers.h"
+#include "TestHelpers/DataModelHelpers.h"
 #include "TestHelpers/ReadWriteSharedData.h"
 
 namespace fs = std::filesystem;
@@ -25,6 +26,7 @@ namespace crk::tests
 				_serializedDataDir(serializedDataDirectory)
 			{
 				printEndianness();
+				printArithmeticTypesSize();
 			}
 
 			void SetUp() override
