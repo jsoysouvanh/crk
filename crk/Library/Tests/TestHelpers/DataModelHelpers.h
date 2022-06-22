@@ -15,6 +15,12 @@ namespace crk::tests
 {
 	void printArithmeticTypesSize()
 	{
+		std::cout << std::endl;
+
+		CRK_PRINT_TYPE_SIZE(bool);
+		
+		std::cout << std::endl;
+
 		CRK_PRINT_TYPE_SIZE(char);
 		CRK_PRINT_TYPE_SIZE(signed char);
 		CRK_PRINT_TYPE_SIZE(unsigned char);
@@ -35,5 +41,7 @@ namespace crk::tests
 		CRK_PRINT_TYPE_SIZE(float);
 		CRK_PRINT_TYPE_SIZE(double);
 		CRK_PRINT_TYPE_SIZE(long double);
+
+		std::cout << std::endl;
 	}
 }
