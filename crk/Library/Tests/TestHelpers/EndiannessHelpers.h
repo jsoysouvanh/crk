@@ -12,26 +12,28 @@
 
 #include <crk/Misc/Endianness.h>
 
-std::string toString(crk::EEndianness endianness) noexcept
+namespace crk::tests
 {
-	switch (endianness)
+	std::string toString(crk::EEndianness endianness) noexcept
 	{
-		case crk::EEndianness::Little:
-			return "Little endian";
+		switch (endianness)
+		{
+			case crk::EEndianness::Little:
+				return "Little endian";
 
-		case crk::EEndianness::Big:
-			return "Big endian";
+			case crk::EEndianness::Big:
+				return "Big endian";
 
-		case crk::EEndianness::Mixed:
-			return "Mixed endian";
+			case crk::EEndianness::Mixed:
+				return "Mixed endian";
 
-		case crk::EEndianness::Unknown:
-			return "Unknown endian";
+			case crk::EEndianness::Unknown:
+				return "Unknown endian";
+		}
+	}
+
+	void printEndianness()
+	{
+		std::cout << "Current machine is " << toString(crk::Endianness::getNativeEndianness()) << std::endl;
 	}
 }
-
-void printEndianness()
-{
-	std::cout << "Current machine is " << toString(crk::Endianness::getNativeEndianness()) << std::endl;
-}
-

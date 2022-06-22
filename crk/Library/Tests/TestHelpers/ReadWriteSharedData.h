@@ -10,6 +10,7 @@
 #include <string>
 
 #include <crk/Misc/Endianness.h>
+#include <crk/Misc/System.h>
 
 //Boolean
 #define CRK_TESTS_ARITHMETIC_DATA_BOOL			true
@@ -50,6 +51,9 @@ namespace crk::tests
 
 			case crk::EEndianness::Mixed:
 				return "ME";
+
+			default:
+				return "UE";
 		}
 	}
 
@@ -61,5 +65,10 @@ namespace crk::tests
 	std::string getSystemEndiannessPrefix()
 	{
 		return getEndiannessPrefix(crk::Endianness::getNativeEndianness()) + "SYS"; //SYS stands for System
+	}
+
+	void printSystemBit()
+	{
+		std::cout << "Current machine is " << crk::System::bits << "-bit." << std::endl;
 	}
 }

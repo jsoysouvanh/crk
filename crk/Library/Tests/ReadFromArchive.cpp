@@ -25,6 +25,7 @@ namespace crk::tests
 			Environment(fs::path const& serializedDataDirectory) noexcept:
 				_serializedDataDir(serializedDataDirectory)
 			{
+				printSystemBit();
 				printEndianness();
 				printArithmeticTypesSize();
 			}

@@ -291,7 +291,7 @@ TEST(Endianness_convert_double, LittleToLittle)
 
 int main(int argc, char** argv)
 {
-	printEndianness();
+	crk::tests::printEndianness();
 
 	::testing::InitGoogleTest(&argc, argv);
 

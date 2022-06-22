@@ -11,26 +11,29 @@
 
 #define CRK_PRINT_TYPE_SIZE(Type) std::cout << #Type << ": " << sizeof(Type) << " bytes." << std::endl;
 
-void printArithmeticTypesSize()
+namespace crk::tests
 {
-	CRK_PRINT_TYPE_SIZE(char);
-	CRK_PRINT_TYPE_SIZE(signed char);
-	CRK_PRINT_TYPE_SIZE(unsigned char);
+	void printArithmeticTypesSize()
+	{
+		CRK_PRINT_TYPE_SIZE(char);
+		CRK_PRINT_TYPE_SIZE(signed char);
+		CRK_PRINT_TYPE_SIZE(unsigned char);
 
-	std::cout << std::endl;
+		std::cout << std::endl;
 
-	CRK_PRINT_TYPE_SIZE(short);
-	CRK_PRINT_TYPE_SIZE(unsigned short);
-	CRK_PRINT_TYPE_SIZE(int);
-	CRK_PRINT_TYPE_SIZE(unsigned int);
-	CRK_PRINT_TYPE_SIZE(long);
-	CRK_PRINT_TYPE_SIZE(unsigned long);
-	CRK_PRINT_TYPE_SIZE(long long);
-	CRK_PRINT_TYPE_SIZE(unsigned long long);
+		CRK_PRINT_TYPE_SIZE(short);
+		CRK_PRINT_TYPE_SIZE(unsigned short);
+		CRK_PRINT_TYPE_SIZE(int);
+		CRK_PRINT_TYPE_SIZE(unsigned int);
+		CRK_PRINT_TYPE_SIZE(long);
+		CRK_PRINT_TYPE_SIZE(unsigned long);
+		CRK_PRINT_TYPE_SIZE(long long);
+		CRK_PRINT_TYPE_SIZE(unsigned long long);
 
-	std::cout << std::endl;
+		std::cout << std::endl;
 
-	CRK_PRINT_TYPE_SIZE(float);
-	CRK_PRINT_TYPE_SIZE(double);
-	CRK_PRINT_TYPE_SIZE(long double);
+		CRK_PRINT_TYPE_SIZE(float);
+		CRK_PRINT_TYPE_SIZE(double);
+		CRK_PRINT_TYPE_SIZE(long double);
+	}
 }
