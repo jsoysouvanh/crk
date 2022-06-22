@@ -8,17 +8,30 @@
 #pragma once
 
 #include <iostream>
+#include <string>
 
 #include <crk/Misc/Endianness.h>
 
+std::string toString(crk::EEndianness endianness) noexcept
+{
+	switch (endianness)
+	{
+		case crk::EEndianness::Little:
+			return "Little endian";
+
+		case crk::EEndianness::Big:
+			return "Big endian";
+
+		case crk::EEndianness::Mixed:
+			return "Mixed endian";
+
+		case crk::EEndianness::Unknown:
+			return "Unknown endian";
+	}
+}
+
 void printEndianness()
 {
-	std::cout << "Current machine is ";
-
-	if constexpr (crk::Endianness::getNativeEndianness() == crk::EEndianness::Little)
-		std::cout << "Little endian" << std::endl;
-	else if constexpr (crk::Endianness::getNativeEndianness() == crk::EEndianness::Big)
-		std::cout << "Big endian" << std::endl;
-	else if constexpr (crk::Endianness::getNativeEndianness() == crk::EEndianness::Mixed)
-		std::cout << "Mixed endian" << std::endl;
+	std::cout << "Current machine is " << toString(crk::Endianness::getNativeEndianness()) << std::endl;
 }
+
