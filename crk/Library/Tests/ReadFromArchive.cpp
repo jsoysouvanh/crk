@@ -1,5 +1,6 @@
 #include <filesystem>
 #include <unordered_map>
+#include <iostream>
 
 #include <gtest/gtest.h>
 #include <crk/Archives/Binary/InBinaryArchive.h>
@@ -39,25 +40,29 @@ namespace crk::tests
 				{
 					if (dir_entry.path().filename().string().find(crk::tests::getArchiveEndiannessPrefix(crk::EEndianness::Big)) != std::string::npos) //Big endian
 					{
+						std::cout << "[READ] BE: " << dir_entry.path().string() << std::endl;
 						_bigEndianFiles.emplace(dir_entry.path().string(), crk::InBinaryArchive<crk::tests::defaultBinArchiveSize, crk::EEndianness::Big>()).first->second.loadFromFile(dir_entry.path().string().c_str());
 					}
 					else if (dir_entry.path().filename().string().find(crk::tests::getArchiveEndiannessPrefix(crk::EEndianness::Little)) != std::string::npos) //Little endian
 					{
+						std::cout << "[READ] LE: " << dir_entry.path().string() << std::endl;
 						_littleEndianFiles.emplace(dir_entry.path().string(), crk::InBinaryArchive<crk::tests::defaultBinArchiveSize, crk::EEndianness::Little>()).first->second.loadFromFile(dir_entry.path().string().c_str());
 					}
 					else if (dir_entry.path().filename().string().find(crk::tests::getArchiveEndiannessPrefix(crk::EEndianness::Mixed)) != std::string::npos) //Mixed endian
 					{
+						std::cout << "[READ] ME: " << dir_entry.path().string() << std::endl;
 						_mixedEndianFiles.emplace(dir_entry.path().string(), crk::InBinaryArchive<crk::tests::defaultBinArchiveSize, crk::EEndianness::Mixed>()).first->second.loadFromFile(dir_entry.path().string().c_str());
 					}
 					else
 					{
+						std::cout << "[SKIP] " << dir_entry.path().string() << std::endl;
 						continue;
 					}
 				}
 
-				GTEST_LOG_(INFO) << "Discovered " << _bigEndianFiles.size() << " big endian files.";
-				GTEST_LOG_(INFO) << "Discovered " << _littleEndianFiles.size() << " little endian files.";
-				GTEST_LOG_(INFO) << "Discovered " << _mixedEndianFiles.size() << " mixed endian files.";
+				std::cout << "[DISCOVERED] " << _bigEndianFiles.size() << " big endian files." << std::endl;
+				std::cout << "[DISCOVERED] " << _littleEndianFiles.size() << " little endian files." << std::endl;
+				std::cout << "[DISCOVERED] " << _mixedEndianFiles.size() << " mixed endian files." << std::endl;
 			}
 
 			auto& getLEArchives() noexcept

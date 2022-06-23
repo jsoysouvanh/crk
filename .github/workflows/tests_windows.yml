@@ -45,6 +45,8 @@ jobs:
   windows_msvc_deserialize:
     name: Windows | MSVC - Deserialize
     runs-on: windows-2019
+    if: ${{ always() }}
+    needs: [windows_msvc]
 
     strategy:
       fail-fast: false
