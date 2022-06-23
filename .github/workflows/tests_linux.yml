@@ -268,7 +268,7 @@ jobs:
             cd /crk_root
 
             cmake --list-presets=all
-            cmake --preset="Clang" -DCRK_MIN_CXX_STD_VERSION=${cpp_version} -DCRK_TESTS_OUTPUT_DIR="${PWD}/TestsOutput" -DCRK_TESTS_OUTPUT_FILENAME="Clang_${build_config}_cpp${cpp_version}_${arch}"
+            cmake --preset="Clang" -DCRK_MIN_CXX_STD_VERSION=${cpp_version} -DCRK_TESTS_OUTPUT_DIR="${PWD}/TestsOutput"
             cmake --build --preset="Clang ${build_config}" --target crkReadFromArchiveTests
 
             ctest --preset="Clang ${build_config}" -R crkReadFromArchiveTests
