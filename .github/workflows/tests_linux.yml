@@ -23,8 +23,6 @@ jobs:
             cpp_version: 20
           - clang_version: 8
             cpp_version: 20
-          - clang_version: 9
-            cpp_version: 20
 
     env:
       clang_compiler_version: -${{ matrix.clang_version }}
@@ -76,13 +74,6 @@ jobs:
         build_config: [Release, Debug]
         gcc_version: [9, 10, 11]    #8 causes a crash on CI with filesystem related destructor
         cpp_version: [17, 20]
-        exclude:
-          - gcc_version: 7
-            cpp_version: 20
-          - gcc_version: 8
-            cpp_version: 20
-          - gcc_version: 9
-            cpp_version: 20
 
     env:
       gcc_compiler_version: -${{ matrix.gcc_version }}
