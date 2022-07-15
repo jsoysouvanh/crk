@@ -24,8 +24,8 @@ fs::path tagFileName(fs::path const& filepath, crk::EEndianness archiveEndiannes
 //======= OutBinaryArchive::pack(Arithmetic) ============
 //=======================================================
 
-template <std::size_t ArchiveSize, crk::EEndianness ArchiveEndianness>
-void serializeArithmetic(crk::OutBinaryArchive<ArchiveSize, ArchiveEndianness>& archive)
+template <std::size_t ArchiveSize, crk::EEndianness ArchiveEndianness, crk::DataModel DataModel>
+void serializeArithmetic(crk::OutBinaryArchive<ArchiveSize, ArchiveEndianness, DataModel>& archive)
 {
 	//Bool
 	archive(CRK_TESTS_ARITHMETIC_DATA_BOOL);
@@ -43,10 +43,10 @@ void serializeArithmetic(crk::OutBinaryArchive<ArchiveSize, ArchiveEndianness>& 
 	archive(CRK_TESTS_ARITHMETIC_DATA_FLOAT, CRK_TESTS_ARITHMETIC_DATA_DOUBLE, CRK_TESTS_ARITHMETIC_DATA_LONGDOUBLE);
 }
 
-template <std::size_t ArchiveSize, crk::EEndianness ArchiveEndianness>
+template <std::size_t ArchiveSize, crk::EEndianness ArchiveEndianness, crk::DataModel DataModel>
 void serializeArchiveToFile(fs::path const& filepath)
 {
-	crk::OutBinaryArchive<ArchiveSize, ArchiveEndianness> archive;
+	crk::OutBinaryArchive<ArchiveSize, ArchiveEndianness, DataModel> archive;
 
 	//Serialize data to archive
 	serializeArithmetic(archive);
@@ -75,8 +75,8 @@ int main(int argc, char** argv)
 	fs::create_directories(outputFile.parent_path());
 
 	//Serialize data to file
-	serializeArchiveToFile<crk::tests::defaultBinArchiveSize, crk::EEndianness::Little>(outputFile);
-	serializeArchiveToFile<crk::tests::defaultBinArchiveSize, crk::EEndianness::Big>(outputFile);
+	serializeArchiveToFile<crk::tests::defaultBinArchiveSize, crk::EEndianness::Little, CRK_TESTS_DATAMODEL>(outputFile);
+	serializeArchiveToFile<crk::tests::defaultBinArchiveSize, crk::EEndianness::Big, CRK_TESTS_DATAMODEL>(outputFile);
 
 	return EXIT_SUCCESS;
 }

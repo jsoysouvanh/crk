@@ -13,14 +13,15 @@ namespace fs = std::filesystem;
 
 namespace crk::tests
 {
+	template <crk::DataModel DataModel>
 	class Environment : public testing::Environment
 	{
 		private:
 			fs::path _serializedDataDir;
 
-			std::unordered_map<std::string, crk::InBinaryArchive<crk::tests::defaultBinArchiveSize, crk::EEndianness::Little>>	_littleEndianFiles;
-			std::unordered_map<std::string, crk::InBinaryArchive<crk::tests::defaultBinArchiveSize, crk::EEndianness::Big>>		_bigEndianFiles;
-			std::unordered_map<std::string, crk::InBinaryArchive<crk::tests::defaultBinArchiveSize, crk::EEndianness::Mixed>>	_mixedEndianFiles;
+			std::unordered_map<std::string, crk::InBinaryArchive<crk::tests::defaultBinArchiveSize, crk::EEndianness::Little, DataModel>>	_littleEndianFiles;
+			std::unordered_map<std::string, crk::InBinaryArchive<crk::tests::defaultBinArchiveSize, crk::EEndianness::Big, DataModel>>	_bigEndianFiles;
+			std::unordered_map<std::string, crk::InBinaryArchive<crk::tests::defaultBinArchiveSize, crk::EEndianness::Mixed, DataModel>>	_mixedEndianFiles;
 
 		public:
 			Environment(fs::path const& serializedDataDirectory) noexcept:
@@ -41,17 +42,17 @@ namespace crk::tests
 					if (dir_entry.path().filename().string().find(crk::tests::getArchiveEndiannessPrefix(crk::EEndianness::Big)) != std::string::npos) //Big endian
 					{
 						std::cout << "[READ] BE: " << dir_entry.path().string() << std::endl;
-						_bigEndianFiles.emplace(dir_entry.path().string(), crk::InBinaryArchive<crk::tests::defaultBinArchiveSize, crk::EEndianness::Big>()).first->second.loadFromFile(dir_entry.path().string().c_str());
+						_bigEndianFiles.emplace(dir_entry.path().string(), crk::InBinaryArchive<crk::tests::defaultBinArchiveSize, crk::EEndianness::Big, DataModel>()).first->second.loadFromFile(dir_entry.path().string().c_str());
 					}
 					else if (dir_entry.path().filename().string().find(crk::tests::getArchiveEndiannessPrefix(crk::EEndianness::Little)) != std::string::npos) //Little endian
 					{
 						std::cout << "[READ] LE: " << dir_entry.path().string() << std::endl;
-						_littleEndianFiles.emplace(dir_entry.path().string(), crk::InBinaryArchive<crk::tests::defaultBinArchiveSize, crk::EEndianness::Little>()).first->second.loadFromFile(dir_entry.path().string().c_str());
+						_littleEndianFiles.emplace(dir_entry.path().string(), crk::InBinaryArchive<crk::tests::defaultBinArchiveSize, crk::EEndianness::Little, DataModel>()).first->second.loadFromFile(dir_entry.path().string().c_str());
 					}
 					else if (dir_entry.path().filename().string().find(crk::tests::getArchiveEndiannessPrefix(crk::EEndianness::Mixed)) != std::string::npos) //Mixed endian
 					{
 						std::cout << "[READ] ME: " << dir_entry.path().string() << std::endl;
-						_mixedEndianFiles.emplace(dir_entry.path().string(), crk::InBinaryArchive<crk::tests::defaultBinArchiveSize, crk::EEndianness::Mixed>()).first->second.loadFromFile(dir_entry.path().string().c_str());
+						_mixedEndianFiles.emplace(dir_entry.path().string(), crk::InBinaryArchive<crk::tests::defaultBinArchiveSize, crk::EEndianness::Mixed, DataModel>()).first->second.loadFromFile(dir_entry.path().string().c_str());
 					}
 					else
 					{
@@ -82,7 +83,7 @@ namespace crk::tests
 	};
 }
 
-crk::tests::Environment* environment = nullptr;
+crk::tests::Environment<CRK_TESTS_DATAMODEL>* environment = nullptr;
 
 #define CRK_TESTS_UNPACK_NEXT_DATA(dataType, expectedValue)			\
 	TEST(InBinaryArchive_unpack_##dataType, FromBigEndian)			\
@@ -174,7 +175,7 @@ int main(int argc, char** argv)
 {
 	::testing::InitGoogleTest(&argc, argv);
 
-	environment = new crk::tests::Environment((argc > 1) ? fs::absolute(argv[1]) : fs::current_path() / "OutputDir");
+	environment = new crk::tests::Environment<CRK_TESTS_DATAMODEL>((argc > 1) ? fs::absolute(argv[1]) : fs::current_path() / "OutputDir");
 	testing::AddGlobalTestEnvironment(environment);
 
 	return RUN_ALL_TESTS();

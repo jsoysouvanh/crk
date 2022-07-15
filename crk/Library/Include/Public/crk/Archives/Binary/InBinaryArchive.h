@@ -82,7 +82,7 @@ namespace crk
 				}
 				else
 				{
-					std::memcpy(target, BinaryArchive<Size, Endianness>::_data.data() + offset, chunkSize);
+					std::memcpy(target, BinaryArchive<Size, Endianness, DataModel>::_data.data() + offset, chunkSize);
 
 					return true;
 				}
@@ -102,7 +102,7 @@ namespace crk
 				}
 
 				file.seekg(0);
-				file.read(reinterpret_cast<char*>(BinaryArchive<Size, Endianness>::_data.data()), fileSize);
+				file.read(reinterpret_cast<char*>(BinaryArchive<Size, Endianness, DataModel>::_data.data()), fileSize);
 
 				file.close();
 

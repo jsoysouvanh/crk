@@ -12,6 +12,9 @@
 #include <crk/Misc/Endianness.h>
 #include <crk/Misc/System.h>
 
+//Data model
+#define CRK_TESTS_DATAMODEL						crk::LLP64DataModel
+
 //Boolean
 #define CRK_TESTS_ARITHMETIC_DATA_BOOL			true
 

@@ -78,7 +78,7 @@ namespace crk
 				}
 				else
 				{
-					std::memcpy(BinaryArchive<Size, Endianness>::_data.data() + offset, chunkStart, chunkSize);
+					std::memcpy(BinaryArchive<Size, Endianness, DataModel>::_data.data() + offset, chunkStart, chunkSize);
 
 					return true;
 				}
@@ -121,9 +121,9 @@ namespace crk
 	{
 		using SerializedIntegerType = decltype(DataModelTypeMapping<DataModel>::template getMappedType<T>());
 
-		T endiannessSwappedObject = Endianness::convert<Endianness::getNativeEndianness(), Endianness>(static_cast<SerializedIntegerType>(object));
+		SerializedIntegerType endiannessSwappedObject = Endianness::convert<Endianness::getNativeEndianness(), Endianness>(static_cast<SerializedIntegerType>(object));
 
-		archive.appendBinaryChunk(reinterpret_cast<std::byte const*>(std::addressof(endiannessSwappedObject)), sizeof(T));
+		archive.appendBinaryChunk(reinterpret_cast<std::byte const*>(std::addressof(endiannessSwappedObject)), sizeof(SerializedIntegerType));
 	}
 
 	template <Character T, std::size_t Size, EEndianness Endianness, DataModel DataModel>
