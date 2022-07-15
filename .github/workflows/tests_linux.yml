@@ -17,7 +17,7 @@ jobs:
       matrix:
         build_config: [Release, Debug]
         clang_version: [7, 8, 9, 10, 11, 12]
-        cpp_version: [17, 20]
+        cpp_version: [20]
         exclude:
           - clang_version: 7
             cpp_version: 20
@@ -73,7 +73,7 @@ jobs:
       matrix:
         build_config: [Release, Debug]
         gcc_version: [9, 10, 11]    #8 causes a crash on CI with filesystem related destructor
-        cpp_version: [17, 20]
+        cpp_version: [20]
 
     env:
       gcc_compiler_version: -${{ matrix.gcc_version }}
@@ -124,7 +124,7 @@ jobs:
       matrix:
         arch: [armv7, s390x, aarch64, ppc64le]
         distro: [ubuntu_latest]
-        cpp_version: [17, 20]
+        cpp_version: [20]
         build_config: [Release, Debug]
 
     steps:
@@ -199,7 +199,7 @@ jobs:
       fail-fast: false
       matrix:
         build_config: [Release, Debug]
-        cpp_version: [17, 20]
+        cpp_version: [20]
         arch: [armv7, s390x, aarch64, ppc64le]
         distro: [ubuntu_latest]
 
