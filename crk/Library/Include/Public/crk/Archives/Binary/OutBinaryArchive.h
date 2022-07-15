@@ -12,10 +12,10 @@
 #include <fstream>		//std::ofstream
 
 #include "crk/Archives/Binary/BinaryArchive.h"
-#include "crk/Misc/Endianness.h"
-#include "crk/Misc/TypeTraits.h"
 #include "crk/Archives/Binary/FundamentalTypes/IntegerTraits.h"
 #include "crk/Archives/Binary/DataModel/DataModelTypeMapping.h"
+#include "crk/Misc/Endianness.h"
+#include "crk/Misc/TypeTraits.h"
 
 namespace crk
 {
@@ -116,9 +116,8 @@ namespace crk
 			}
 	};
 
-	template <typename T, std::size_t Size, EEndianness Endianness, DataModel DataModel>
+	template <Integer T, std::size_t Size, EEndianness Endianness, DataModel DataModel>
 	void serialize(OutBinaryArchive<Size, Endianness, DataModel>& archive, T const& object)
-		requires IsInteger<T>
 	{
 		using SerializedIntegerType = decltype(DataModelTypeMapping<DataModel>::template getMappedType<T>());
 
@@ -127,18 +126,16 @@ namespace crk
 		archive.appendBinaryChunk(reinterpret_cast<std::byte const*>(std::addressof(endiannessSwappedObject)), sizeof(T));
 	}
 
-	template <typename T, std::size_t Size, EEndianness Endianness, DataModel DataModel>
+	template <Character T, std::size_t Size, EEndianness Endianness, DataModel DataModel>
 	void serialize(OutBinaryArchive<Size, Endianness, DataModel>& archive, T const& object)
-		requires IsCharacter<T>
 	{
 		T endiannessSwappedObject = Endianness::convert<Endianness::getNativeEndianness(), Endianness>(object);
 
 		archive.appendBinaryChunk(reinterpret_cast<std::byte const*>(std::addressof(endiannessSwappedObject)), sizeof(T));
 	}
 
-	template <typename T, std::size_t Size, EEndianness Endianness, DataModel DataModel>
+	template <Boolean T, std::size_t Size, EEndianness Endianness, DataModel DataModel>
 	void serialize(OutBinaryArchive<Size, Endianness, DataModel>& archive, T const& object)
-		requires IsBoolean<T>
 	{
 		T endiannessSwappedObject = Endianness::convert<Endianness::getNativeEndianness(), Endianness>(object);
 
@@ -147,9 +144,8 @@ namespace crk
 		archive.appendBinaryChunk(reinterpret_cast<std::byte const*>(std::addressof(endiannessSwappedObject)), sizeof(T));
 	}
 
-	template <typename T, std::size_t Size, EEndianness Endianness, DataModel DataModel>
+	template <FloatingPoint T, std::size_t Size, EEndianness Endianness, DataModel DataModel>
 	void serialize(OutBinaryArchive<Size, Endianness, DataModel>& archive, T const& object)
-		requires IsFloatingPoint<T>
 	{
 		T endiannessSwappedObject = Endianness::convert<Endianness::getNativeEndianness(), Endianness>(object);
 

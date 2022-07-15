@@ -30,7 +30,7 @@
 #if __cplusplus >= 202002L
 	#define CRK_CPP20 1
 #else
-	#error "[crk] Requires C++20 or newer."
+//	#error "[crk] Requires C++20 or newer."
 #endif
 
 //Compiler

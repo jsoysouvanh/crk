@@ -13,7 +13,10 @@
 #include <cstring>		//std::memcpy
 
 #include "crk/Archives/Binary/BinaryArchive.h"
+#include "crk/Archives/Binary/FundamentalTypes/IntegerTraits.h"
+#include "crk/Archives/Binary/DataModel/DataModelTypeMapping.h"
 #include "crk/Misc/Endianness.h"
+#include "crk/Misc/TypeTraits.h"
 
 namespace crk
 {
@@ -107,8 +110,33 @@ namespace crk
 			}
 	};
 
-	template <typename T, std::size_t Size, EEndianness Endianness, typename = std::enable_if_t<std::is_arithmetic_v<T>>>
-	void deserialize(InBinaryArchive<Size, Endianness>& archive, T& object)
+	template <Integer T, std::size_t Size, EEndianness Endianness, DataModel DataModel>
+	void deserialize(InBinaryArchive<Size, Endianness, DataModel>& archive, T& object)
+	{
+		using SerializedIntegerType = decltype(DataModelTypeMapping<DataModel>::template getMappedType<T>());
+
+		SerializedIntegerType readInteger;
+
+		archive.readNextBinaryChunk(sizeof(SerializedIntegerType), reinterpret_cast<std::byte*>(std::addressof(readInteger)));
+		object = Endianness::convert<Endianness, Endianness::getNativeEndianness()>(readInteger);
+	}
+
+	template <Boolean T, std::size_t Size, EEndianness Endianness, DataModel DataModel>
+	void deserialize(InBinaryArchive<Size, Endianness, DataModel>& archive, T& object)
+	{
+		archive.readNextBinaryChunk(sizeof(T), reinterpret_cast<std::byte*>(std::addressof(object)));
+		object = Endianness::convert<Endianness, Endianness::getNativeEndianness()>(object);
+	}
+
+	template <Character T, std::size_t Size, EEndianness Endianness, DataModel DataModel>
+	void deserialize(InBinaryArchive<Size, Endianness, DataModel>& archive, T& object)
+	{
+		archive.readNextBinaryChunk(sizeof(T), reinterpret_cast<std::byte*>(std::addressof(object)));
+		object = Endianness::convert<Endianness, Endianness::getNativeEndianness()>(object);
+	}
+
+	template <FloatingPoint T, std::size_t Size, EEndianness Endianness, DataModel DataModel>
+	void deserialize(InBinaryArchive<Size, Endianness, DataModel>& archive, T& object)
 	{
 		archive.readNextBinaryChunk(sizeof(T), reinterpret_cast<std::byte*>(std::addressof(object)));
 		object = Endianness::convert<Endianness, Endianness::getNativeEndianness()>(object);

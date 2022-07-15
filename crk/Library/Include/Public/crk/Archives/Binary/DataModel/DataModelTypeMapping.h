@@ -18,26 +18,26 @@ namespace crk
 	template <DataModel DataModel>
 	struct DataModelTypeMapping
 	{
-		template <IsInteger T>
+		template <Integer T>
 		static auto getMappedType();
 
         //short
-        template <IsInteger T>
+        template <Integer T>
         static auto getMappedType() -> IntegerType_t<DataModel.shortSize, std::is_same_v<T, unsigned short>>
             requires std::same_as<T, short> || std::same_as<T, unsigned short>;
 
         //int
-        template <IsInteger T>
+        template <Integer T>
         static auto getMappedType() -> IntegerType_t<DataModel.intSize, std::is_same_v<T, unsigned int>>
             requires std::same_as<T, int> || std::same_as<T, unsigned int>;
 
         //long
-        template <IsInteger T>
+        template <Integer T>
         static auto getMappedType() -> IntegerType_t<DataModel.longSize, std::is_same_v<T, unsigned long>>
             requires std::same_as<T, long> || std::same_as<T, unsigned long>;
 
         //long long
-        template <IsInteger T>
+        template <Integer T>
         static auto getMappedType() -> IntegerType_t<DataModel.longlongSize, std::is_same_v<T, unsigned long long>>
             requires std::same_as<T, long long> || std::same_as<T, unsigned long long>;
 	};
