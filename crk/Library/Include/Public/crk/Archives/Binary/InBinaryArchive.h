@@ -16,7 +16,7 @@
 #include "crk/Archives/Binary/FundamentalTypes/IntegerTraits.h"
 #include "crk/Archives/Binary/DataModel/DataModelTypeMapping.h"
 #include "crk/Misc/Endianness.h"
-#include "crk/Misc/TypeTraits.h"
+#include "crk/Misc/Concepts.h"
 
 namespace crk
 {

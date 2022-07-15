@@ -7,19 +7,18 @@
 
 #pragma once
 
-#include <concepts>
-
+#include "crk/Misc/Concepts.h"
 #include "crk/Archives/Binary/FundamentalTypes/Formats/Integer/NativeIntegerFormat.h"
 
 namespace crk
 {
 	template <typename FromIntegerFormat, typename ToIntegerFormat>
-	auto convertIntegerFormat(std::integral auto integer);
+	auto convertIntegerFormat(Integer auto integer);
 
 	//No format conversion, return the passed value as is
 	template <typename FromIntegerFormat, typename ToIntegerFormat>
-	auto convertIntegerFormat(std::integral auto integer)
-		requires std::same_as<FromIntegerFormat, ToIntegerFormat>
+	auto convertIntegerFormat(Integer auto integer)
+		requires SameAs<FromIntegerFormat, ToIntegerFormat>
 	{
 		return integer;
 	}

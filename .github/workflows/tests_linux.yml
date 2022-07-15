@@ -16,13 +16,8 @@ jobs:
       fail-fast: false
       matrix:
         build_config: [Release, Debug]
-        clang_version: [7, 8, 9, 10, 11, 12]
+        clang_version: [12]
         cpp_version: [20]
-        exclude:
-          - clang_version: 7
-            cpp_version: 20
-          - clang_version: 8
-            cpp_version: 20
 
     env:
       clang_compiler_version: -${{ matrix.clang_version }}
@@ -72,7 +67,7 @@ jobs:
       fail-fast: false
       matrix:
         build_config: [Release, Debug]
-        gcc_version: [9, 10, 11]    #8 causes a crash on CI with filesystem related destructor
+        gcc_version: [10, 11]
         cpp_version: [20]
 
     env:
