@@ -29,6 +29,9 @@ namespace crk::tests
 
 			case crk::EEndianness::Unknown:
 				return "Unknown endian";
+
+			default:
+				return "default";
 		}
 	}
 

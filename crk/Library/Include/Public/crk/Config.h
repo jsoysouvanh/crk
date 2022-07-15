@@ -29,8 +29,8 @@
 //C++ version
 #if __cplusplus >= 202002L
 	#define CRK_CPP20 1
-#elif __cplusplus >= 201703L
-	#define CRK_CPP17 1
+#else
+	#error "[crk] Requires C++20 or newer."
 #endif
 
 //Compiler

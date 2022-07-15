@@ -30,6 +30,9 @@ add_executable(${crkWriteToArchiveTestsTarget} "WriteToArchive.cpp")
 set(crkReadFromArchiveTestsTarget crkReadFromArchiveTests)
 add_executable(${crkReadFromArchiveTestsTarget} "ReadFromArchive.cpp")
 
+set(crkIntegerTraitsTestsTarget crkIntegerTraitsTests)
+add_executable(${crkIntegerTraitsTestsTarget} "IntegerTraitsTests.cpp")
+
 # Link libraries
 target_link_libraries(${crkEndiannessTestsTarget} PUBLIC gtest)
 target_link_libraries(${crkWriteToArchiveTestsTarget} PUBLIC gtest)
@@ -39,6 +42,7 @@ target_link_libraries(${crkReadFromArchiveTestsTarget} PUBLIC gtest)
 target_include_directories(${crkEndiannessTestsTarget} PRIVATE Include)
 target_include_directories(${crkWriteToArchiveTestsTarget} PRIVATE Include)
 target_include_directories(${crkReadFromArchiveTestsTarget} PRIVATE Include)
+target_include_directories(${crkIntegerTraitsTestsTarget} PRIVATE Include)
 
 #refureku_setup_target(
 #	TARGET ${RefurekuTestsTarget}
@@ -48,6 +52,7 @@ target_include_directories(${crkReadFromArchiveTestsTarget} PRIVATE Include)
 target_link_libraries(${crkEndiannessTestsTarget} PUBLIC crk)
 target_link_libraries(${crkWriteToArchiveTestsTarget} PUBLIC crk)
 target_link_libraries(${crkReadFromArchiveTestsTarget} PUBLIC crk)
+target_link_libraries(${crkIntegerTraitsTestsTarget} PUBLIC crk)
 
 if (MSVC)
 	target_compile_options(${crkEndiannessTestsTarget} PRIVATE /MP /bigobj)
@@ -72,3 +77,6 @@ add_test(NAME ${crkWriteToArchiveTestsTarget}
 
 add_test(NAME ${crkReadFromArchiveTestsTarget}
 		 COMMAND ${crkReadFromArchiveTestsTarget} ${CRK_TESTS_OUTPUT_DIR})
+
+add_test(NAME ${crkIntegerTraitsTestsTarget}
+		 COMMAND ${crkIntegerTraitsTestsTarget})

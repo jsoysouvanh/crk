@@ -7,15 +7,9 @@
 
 #pragma once
 
-#include <vector>
-#include <cstddef>	//std::byte
-
-#include "crk/Archives/ArchiveBase.h"
+#include "crk/Config.h"
 
 namespace crk
 {
-	class PortableBinaryArchive : public ArchiveBase
-	{
-
-	};
+	struct BinaryFormat {};
 }

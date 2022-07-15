@@ -17,8 +17,8 @@
 
 namespace crk
 {
-	template <std::size_t Size, EEndianness Endianness = EEndianness::Little>
-	class InBinaryArchive : public BinaryArchive<Size, Endianness>
+	template <std::size_t Size, EEndianness Endianness = EEndianness::Little, DataModel DataModel = LLP64DataModel>
+	class InBinaryArchive : public BinaryArchive<Size, Endianness, DataModel>
 	{
 		private:
 			std::size_t	_readOffset = 0u;

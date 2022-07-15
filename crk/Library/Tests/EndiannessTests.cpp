@@ -287,7 +287,25 @@ TEST(Endianness_convert_double, LittleToLittle)
 	EXPECT_EQ((crk::Endianness::convert<crk::EEndianness::Little, crk::EEndianness::Little>(d)), d);
 }
 
-//TODO: Add tests for long double / int128
+//=======================================================
+//========== Endianness::convert(long double) ===========
+//=======================================================
+
+//TEST(Endianness_convert_longdouble, LittleToBig)
+//{
+//}
+
+//TEST(Endianness_convert_longdouble, BigToLittle)
+//{
+//}
+//
+//TEST(Endianness_convert_longdouble, BigToBig)
+//{
+//}
+//
+//TEST(Endianness_convert_longdouble, LittleToLittle)
+//{
+//}
 
 int main(int argc, char** argv)
 {

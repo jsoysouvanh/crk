@@ -9,9 +9,7 @@ add_library(${crkLibraryTarget}
 
 # Setup language requirements
 if (NOT CRK_MIN_CXX_STD_VERSION)
-	set(CRK_MIN_CXX_STD_VERSION cxx_std_17)	# Default to c++17
-elseif(CRK_MIN_CXX_STD_VERSION EQUAL 17)
-	set(CRK_MIN_CXX_STD_VERSION cxx_std_17)
+	set(CRK_MIN_CXX_STD_VERSION cxx_std_20)	# Default to c++20
 elseif(CRK_MIN_CXX_STD_VERSION EQUAL 20)
 	set(CRK_MIN_CXX_STD_VERSION cxx_std_20)
 endif()
@@ -25,7 +23,12 @@ target_include_directories(${crkLibraryTarget}
 # Setup compilation flags
 if (MSVC)
 
-	target_compile_options(${crkLibraryTarget} PRIVATE /MP)	# Multithread compilation
+	target_compile_options(${crkLibraryTarget}
+							PRIVATE
+								/MP					# Multithread compilation
+							PUBLIC
+								/Zc:__cplusplus		# Enable MSVC to report an updated value for recent C++ language standards support.
+							)
 
 	string(REGEX REPLACE "/W[0-4]" "/W4" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")	# Replace the default flag /W3 by /W4
 

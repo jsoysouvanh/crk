@@ -9,18 +9,22 @@
 
 #include <cstring>		//std::memcpy
 #include <utility>		//std::forward
-#include <type_traits>	//std::is_arithmetic_v, std::enable_if_t...
 #include <fstream>		//std::ofstream
 
 #include "crk/Archives/Binary/BinaryArchive.h"
 #include "crk/Misc/Endianness.h"
+#include "crk/Misc/TypeTraits.h"
+#include "crk/Archives/Binary/FundamentalTypes/IntegerTraits.h"
+#include "crk/Archives/Binary/DataModel/DataModelTypeMapping.h"
 
 namespace crk
 {
-	template <std::size_t Size, EEndianness Endianness = EEndianness::Little>
-	class OutBinaryArchive : public BinaryArchive<Size, Endianness>
+	template <std::size_t Size, EEndianness Endianness = EEndianness::Little, DataModel DataModel = LLP64DataModel>
+	class OutBinaryArchive : public BinaryArchive<Size, Endianness, DataModel>
 	{
 		private:
+			using ParentBinaryArchiveType = BinaryArchive<Size, Endianness, DataModel>;
+
 			std::size_t	_writeOffset = 0u;
 
 		public:
@@ -106,17 +110,50 @@ namespace crk
 				std::ofstream file;
 				file.open(filepath, std::ios_base::binary);
 
-				file.write(reinterpret_cast<char const*>(BinaryArchive<Size, Endianness>::_data.data()), getWriteOffset());
+				file.write(reinterpret_cast<char const*>(ParentBinaryArchiveType::_data.data()), getWriteOffset());
 
 				file.close();
 			}
 	};
 
+	template <typename T, std::size_t Size, EEndianness Endianness, DataModel DataModel>
+	void serialize(OutBinaryArchive<Size, Endianness, DataModel>& archive, T const& object)
+		requires IsInteger<T>
+	{
+		using SerializedIntegerType = decltype(DataModelTypeMapping<DataModel>::template getMappedType<T>());
 
-	template <typename T, std::size_t Size, EEndianness Endianness, typename = std::enable_if_t<std::is_arithmetic_v<T>>>
-	void serialize(OutBinaryArchive<Size, Endianness>& archive, T const& object)
+		T endiannessSwappedObject = Endianness::convert<Endianness::getNativeEndianness(), Endianness>(static_cast<SerializedIntegerType>(object));
+
+		archive.appendBinaryChunk(reinterpret_cast<std::byte const*>(std::addressof(endiannessSwappedObject)), sizeof(T));
+	}
+
+	template <typename T, std::size_t Size, EEndianness Endianness, DataModel DataModel>
+	void serialize(OutBinaryArchive<Size, Endianness, DataModel>& archive, T const& object)
+		requires IsCharacter<T>
 	{
 		T endiannessSwappedObject = Endianness::convert<Endianness::getNativeEndianness(), Endianness>(object);
+
+		archive.appendBinaryChunk(reinterpret_cast<std::byte const*>(std::addressof(endiannessSwappedObject)), sizeof(T));
+	}
+
+	template <typename T, std::size_t Size, EEndianness Endianness, DataModel DataModel>
+	void serialize(OutBinaryArchive<Size, Endianness, DataModel>& archive, T const& object)
+		requires IsBoolean<T>
+	{
+		T endiannessSwappedObject = Endianness::convert<Endianness::getNativeEndianness(), Endianness>(object);
+
+		//TODO: Write (char)1 for true and (char)0 for false.
+
+		archive.appendBinaryChunk(reinterpret_cast<std::byte const*>(std::addressof(endiannessSwappedObject)), sizeof(T));
+	}
+
+	template <typename T, std::size_t Size, EEndianness Endianness, DataModel DataModel>
+	void serialize(OutBinaryArchive<Size, Endianness, DataModel>& archive, T const& object)
+		requires IsFloatingPoint<T>
+	{
+		T endiannessSwappedObject = Endianness::convert<Endianness::getNativeEndianness(), Endianness>(object);
+
+		//TODO: Might have to consider float endianness if it differs from classic CPU endianness
 
 		archive.appendBinaryChunk(reinterpret_cast<std::byte const*>(std::addressof(endiannessSwappedObject)), sizeof(T));
 	}
