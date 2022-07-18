@@ -119,10 +119,13 @@ namespace crk
 	template <Integer T, std::size_t Size, EEndianness Endianness, DataModel DataModel>
 	void serialize(OutBinaryArchive<Size, Endianness, DataModel>& archive, T const& object)
 	{
+		//Retrieve the integer type from the DataModel
 		using SerializedIntegerType = decltype(DataModelTypeMapping<DataModel>::template getMappedType<T>());
 
+		//Cast the provided integer to the retrieved integer type + convert endianness
 		SerializedIntegerType endiannessSwappedObject = Endianness::convert<Endianness::getNativeEndianness(), Endianness>(static_cast<SerializedIntegerType>(object));
 
+		//Write binary to archive
 		archive.appendBinaryChunk(reinterpret_cast<std::byte const*>(std::addressof(endiannessSwappedObject)), sizeof(SerializedIntegerType));
 	}
 

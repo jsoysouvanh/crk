@@ -15,53 +15,59 @@ namespace crk
 	// IntegerType
 	// ======================
 
+	/**
+	*	@brief Struct that maps a size (in bits) to the corresponding integer type.
+	* 
+	*	@tparam IntegerSize Size in bits of the target integer.
+	*	@tparam IsUnsigned	Target the unsigned integer version?
+	*/
 	template <std::size_t IntegerSize, bool IsUnsigned>
 	struct IntegerType;
 
 	template <>
-	struct IntegerType<1, false>
+	struct IntegerType<8u, false>
 	{
 		using type = int8_t;
 	};
 
 	template <>
-	struct IntegerType<1, true>
+	struct IntegerType<8u, true>
 	{
 		using type = uint8_t;
 	};
 
 	template <>
-	struct IntegerType<2, false>
+	struct IntegerType<16u, false>
 	{
 		using type = int16_t;
 	};
 
 	template <>
-	struct IntegerType<2, true>
+	struct IntegerType<16u, true>
 	{
 		using type = uint16_t;
 	};
 
 	template <>
-	struct IntegerType<4, false>
+	struct IntegerType<32u, false>
 	{
 		using type = int32_t;
 	};
 
 	template <>
-	struct IntegerType<4, true>
+	struct IntegerType<32u, true>
 	{
 		using type = uint32_t;
 	};
 
 	template <>
-	struct IntegerType<8, false>
+	struct IntegerType<64u, false>
 	{
 		using type = int64_t;
 	};
 
 	template <>
-	struct IntegerType<8, true>
+	struct IntegerType<64u, true>
 	{
 		using type = uint64_t;
 	};

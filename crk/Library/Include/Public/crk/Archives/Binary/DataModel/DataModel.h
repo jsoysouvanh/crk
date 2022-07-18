@@ -11,53 +11,56 @@
 
 namespace crk
 {
+	/**
+	*	@brief Struct defining the serialization encoding of fundamental types in an archive.
+	*/
 	//TODO: Add encoding/format as well
 	//template <IntegerFormat, FloatFormat, DoubleFormat, LongDoubleFormat>
 	struct DataModel
 	{
 		/**
-		*	@brief Size in bytes of a short.
+		*	@brief Size in bits of a short.
 		*/
 		std::size_t	shortSize;
 
 		/**
-		*	@brief Size in bytes of an int.
+		*	@brief Size in bits of an int.
 		*/
 		std::size_t intSize;
 
 		/**
-		*	@brief Size in bytes of a long.
+		*	@brief Size in bits of a long.
 		*/
 		std::size_t	longSize;
 
 		/**
-		*	@brief Size in bytes of a long long.
+		*	@brief Size in bits of a long long.
 		*/
 		std::size_t longlongSize;
 	};
 
 	constexpr DataModel LP32DataModel =
 	{
-		.shortSize		= 2u,
-		.intSize		= 2u,
-		.longSize		= 4u,
-		.longlongSize	= 8u
+		.shortSize		= 16u,
+		.intSize		= 16u,
+		.longSize		= 32u,
+		.longlongSize	= 64u
 	};
 
 	//Equivalent to ILP32
 	constexpr DataModel LLP64DataModel =
 	{
-		.shortSize		= 2u,
-		.intSize		= 4u,
-		.longSize		= 4u,
-		.longlongSize	= 8u
+		.shortSize		= 16u,
+		.intSize		= 32u,
+		.longSize		= 32u,
+		.longlongSize	= 64u
 	};
 
 	constexpr DataModel LP64DataModel =
 	{
-		.shortSize		= 2u,
-		.intSize		= 4u,
-		.longSize		= 8u,
-		.longlongSize	= 8u
+		.shortSize		= 16u,
+		.intSize		= 32u,
+		.longSize		= 64u,
+		.longlongSize	= 64u
 	};
 }

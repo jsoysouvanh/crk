@@ -24,10 +24,10 @@ namespace crk
 	{
 		//Check data model validity
 		//See https://en.cppreference.com/w/cpp/language/types
-		static_assert(DataModel.shortSize >= 2 && DataModel.shortSize <= DataModel.intSize);
-		static_assert(DataModel.intSize >= 2 && DataModel.intSize <= DataModel.longSize);
-		static_assert(DataModel.longSize >= 4 && DataModel.longSize <= DataModel.longlongSize);
-		static_assert(DataModel.longlongSize >= 8);
+		static_assert(DataModel.shortSize >= 16 && DataModel.shortSize <= DataModel.intSize);
+		static_assert(DataModel.intSize >= 16 && DataModel.intSize <= DataModel.longSize);
+		static_assert(DataModel.longSize >= 32 && DataModel.longSize <= DataModel.longlongSize);
+		static_assert(DataModel.longlongSize >= 64);
 
 		protected:
 			std::array<std::byte, Size>	_data;
