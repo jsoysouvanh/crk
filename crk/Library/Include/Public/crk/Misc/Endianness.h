@@ -28,7 +28,7 @@
 #endif
 
 #include "crk/Misc/EEndianness.h"
-#include "crk/Misc/Concepts.h"
+#include "crk/Misc/TypeConcepts.h"
 
 namespace crk
 {

@@ -90,7 +90,7 @@ crk::tests::Environment<CRK_TESTS_DATAMODEL>* environment = nullptr;
 	{																\
 		for (auto& archive : environment->getBEArchives())			\
 		{															\
-			dataType readData;										\
+			decltype(expectedValue) readData;						\
 																	\
 			archive.second.unpack(readData);						\
 																	\
@@ -102,7 +102,7 @@ crk::tests::Environment<CRK_TESTS_DATAMODEL>* environment = nullptr;
 	{																\
 		for (auto& archive : environment->getLEArchives())			\
 		{															\
-			dataType readData;										\
+			decltype(expectedValue) readData;						\
 																	\
 			archive.second.unpack(readData);						\
 																	\

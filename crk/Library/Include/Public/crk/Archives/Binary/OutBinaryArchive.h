@@ -15,7 +15,7 @@
 #include "crk/Archives/Binary/FundamentalTypes/IntegerTraits.h"
 #include "crk/Archives/Binary/DataModel/DataModelTypeMapping.h"
 #include "crk/Misc/Endianness.h"
-#include "crk/Misc/Concepts.h"
+#include "crk/Misc/TypeConcepts.h"
 
 namespace crk
 {
@@ -122,6 +122,8 @@ namespace crk
 		//Retrieve the integer type from the DataModel
 		using SerializedIntegerType = decltype(DataModelTypeMapping<DataModel>::template getMappedType<T>());
 
+		//TODO: Perform encoding conversion
+
 		//Cast the provided integer to the retrieved integer type + convert endianness
 		SerializedIntegerType endiannessSwappedObject = Endianness::convert<Endianness::getNativeEndianness(), Endianness>(static_cast<SerializedIntegerType>(object));
 
@@ -132,6 +134,8 @@ namespace crk
 	template <FixedWidthInteger T, std::size_t Size, EEndianness Endianness, DataModel DataModel>
 	void serialize(OutBinaryArchive<Size, Endianness, DataModel>& archive, T const& object)
 	{
+		//TODO: Perform encoding conversion
+
 		//Cast the provided integer to the retrieved integer type + convert endianness
 		T endiannessSwappedObject = Endianness::convert<Endianness::getNativeEndianness(), Endianness>(static_cast<typename T::WrappedType>(object));
 

@@ -16,7 +16,7 @@
 #include "crk/Archives/Binary/FundamentalTypes/IntegerTraits.h"
 #include "crk/Archives/Binary/DataModel/DataModelTypeMapping.h"
 #include "crk/Misc/Endianness.h"
-#include "crk/Misc/Concepts.h"
+#include "crk/Misc/TypeConcepts.h"
 
 namespace crk
 {
@@ -117,6 +117,8 @@ namespace crk
 
 		SerializedIntegerType readInteger;
 
+		//TODO: Perform encoding conversion
+
 		archive.readNextBinaryChunk(sizeof(SerializedIntegerType), reinterpret_cast<std::byte*>(std::addressof(readInteger)));
 		object = Endianness::convert<Endianness, Endianness::getNativeEndianness()>(readInteger);
 	}
@@ -124,9 +126,13 @@ namespace crk
 	template <FixedWidthInteger T, std::size_t Size, EEndianness Endianness, DataModel DataModel>
 	void deserialize(InBinaryArchive<Size, Endianness, DataModel>& archive, T& object)
 	{
-		T readInteger;
+		using WrappedType = typename T::WrappedType;
 
-		archive.readNextBinaryChunk(sizeof(T), reinterpret_cast<std::byte*>(std::addressof(readInteger)));
+		WrappedType readInteger;
+
+		//TODO: Perform encoding conversion
+
+		archive.readNextBinaryChunk(sizeof(WrappedType), reinterpret_cast<std::byte*>(std::addressof(readInteger)));
 		object = Endianness::convert<Endianness, Endianness::getNativeEndianness()>(readInteger);
 	}
 

@@ -9,7 +9,8 @@
 
 #include "crk/Archives/Binary/DataModel/DataModel.h"
 #include "crk/Archives/Binary/FundamentalTypes/IntegerTraits.h"
-#include "crk/Misc/Concepts.h"
+#include "crk/Misc/GenericConcepts.h"
+#include "crk/Misc/TypeConcepts.h"
 
 namespace crk
 {

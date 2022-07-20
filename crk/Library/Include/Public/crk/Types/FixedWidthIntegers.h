@@ -9,6 +9,8 @@
 
 #include <cstdint>	//std::int8_t, std::int16_t...
 
+#include "crk/Misc/GenericConcepts.h"
+
 namespace crk
 {
 	template <typename T>
@@ -20,13 +22,24 @@ namespace crk
 		public:
 			using WrappedType = T;
 
-			ObjectWrapper(T wrappedObject) noexcept:
-				_wrappedObject{wrappedObject}
+			ObjectWrapper() = default;
+
+			template <typename U> requires ConvertibleTo<U, T>
+			ObjectWrapper(U wrappedObject) noexcept:
+				_wrappedObject{static_cast<T>(wrappedObject)}
 			{}
 
 			operator T() const noexcept
 			{
 				return _wrappedObject;
+			}
+
+			template <typename U> requires ConvertibleTo<U, T>
+			ObjectWrapper& operator=(U wrappedObject) noexcept
+			{
+				_wrappedObject = static_cast<T>(wrappedObject);
+
+				return *this;
 			}
 	};
 

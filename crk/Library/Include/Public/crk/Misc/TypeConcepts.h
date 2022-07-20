@@ -49,10 +49,4 @@ namespace crk
 
 	template <typename T>
 	concept Boolean = std::is_same_v<T, bool>;
-
-	template <typename T, typename U>
-	concept SameAs = std::is_same_v<T, U>;
-
-	template <typename T>
-	concept Arithmetic = std::is_arithmetic_v<T>;
 }

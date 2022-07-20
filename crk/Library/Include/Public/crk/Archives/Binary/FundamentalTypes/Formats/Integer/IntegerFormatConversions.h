@@ -7,7 +7,8 @@
 
 #pragma once
 
-#include "crk/Misc/Concepts.h"
+#include "crk/Misc/GenericConcepts.h"
+#include "crk/Misc/TypeConcepts.h"
 #include "crk/Archives/Binary/FundamentalTypes/Formats/Integer/NativeIntegerFormat.h"
 
 namespace crk
