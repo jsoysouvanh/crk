@@ -129,6 +129,16 @@ namespace crk
 		archive.appendBinaryChunk(reinterpret_cast<std::byte const*>(std::addressof(endiannessSwappedObject)), sizeof(SerializedIntegerType));
 	}
 
+	template <FixedWidthInteger T, std::size_t Size, EEndianness Endianness, DataModel DataModel>
+	void serialize(OutBinaryArchive<Size, Endianness, DataModel>& archive, T const& object)
+	{
+		//Cast the provided integer to the retrieved integer type + convert endianness
+		T endiannessSwappedObject = Endianness::convert<Endianness::getNativeEndianness(), Endianness>(static_cast<typename T::WrappedType>(object));
+
+		//Write binary to archive
+		archive.appendBinaryChunk(reinterpret_cast<std::byte const*>(std::addressof(endiannessSwappedObject)), sizeof(T));
+	}
+
 	template <Character T, std::size_t Size, EEndianness Endianness, DataModel DataModel>
 	void serialize(OutBinaryArchive<Size, Endianness, DataModel>& archive, T const& object)
 	{

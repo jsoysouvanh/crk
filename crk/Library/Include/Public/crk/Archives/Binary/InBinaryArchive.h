@@ -121,6 +121,15 @@ namespace crk
 		object = Endianness::convert<Endianness, Endianness::getNativeEndianness()>(readInteger);
 	}
 
+	template <FixedWidthInteger T, std::size_t Size, EEndianness Endianness, DataModel DataModel>
+	void deserialize(InBinaryArchive<Size, Endianness, DataModel>& archive, T& object)
+	{
+		T readInteger;
+
+		archive.readNextBinaryChunk(sizeof(T), reinterpret_cast<std::byte*>(std::addressof(readInteger)));
+		object = Endianness::convert<Endianness, Endianness::getNativeEndianness()>(readInteger);
+	}
+
 	template <Boolean T, std::size_t Size, EEndianness Endianness, DataModel DataModel>
 	void deserialize(InBinaryArchive<Size, Endianness, DataModel>& archive, T& object)
 	{

@@ -9,6 +9,8 @@
 
 #include <type_traits>
 
+#include "crk/Types/FixedWidthIntegers.h"
+
 namespace crk
 {
 	template <typename T>
@@ -20,6 +22,16 @@ namespace crk
 					  std::is_same_v<T, unsigned long> ||
 					  std::is_same_v<T, long long> ||
 					  std::is_same_v<T, unsigned long long>;
+
+	template <typename T>
+	concept FixedWidthInteger = std::is_same_v<T, crk::int8> ||
+								std::is_same_v<T, crk::uint8> ||
+								std::is_same_v<T, crk::int16> ||
+								std::is_same_v<T, crk::uint16> ||
+								std::is_same_v<T, crk::int32> ||
+								std::is_same_v<T, crk::uint32> ||
+								std::is_same_v<T, crk::int64> ||
+								std::is_same_v<T, crk::uint64>;
 
 	template <typename T>
 	concept FloatingPoint = std::is_same_v<T, float> ||
@@ -40,4 +52,7 @@ namespace crk
 
 	template <typename T, typename U>
 	concept SameAs = std::is_same_v<T, U>;
+
+	template <typename T>
+	concept Arithmetic = std::is_arithmetic_v<T>;
 }

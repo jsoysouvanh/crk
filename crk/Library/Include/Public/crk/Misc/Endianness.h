@@ -28,6 +28,7 @@
 #endif
 
 #include "crk/Misc/EEndianness.h"
+#include "crk/Misc/Concepts.h"
 
 namespace crk
 {
@@ -171,7 +172,7 @@ namespace crk
 			* 
 			*	@return The object converted to the specified endianness.
 			*/
-			template <EEndianness SourceEndianness, EEndianness TargetEndianness, typename T, typename = std::enable_if_t<std::is_arithmetic_v<T>>>
+			template <EEndianness SourceEndianness, EEndianness TargetEndianness, Arithmetic T>
 			CRK_NODISCARD static T						convert(T v)			noexcept;
 	};
 
