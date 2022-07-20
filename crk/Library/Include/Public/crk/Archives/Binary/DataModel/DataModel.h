@@ -19,22 +19,22 @@ namespace crk
 	struct DataModel
 	{
 		/**
-		*	@brief Size in bits of a short.
+		*	@brief Size in bits of a short (and by extension, an unsigned short).
 		*/
 		std::size_t	shortSize;
 
 		/**
-		*	@brief Size in bits of an int.
+		*	@brief Size in bits of an int (and by extension, an unsigned int).
 		*/
 		std::size_t intSize;
 
 		/**
-		*	@brief Size in bits of a long.
+		*	@brief Size in bits of a long (and by extension, an unsigned long).
 		*/
 		std::size_t	longSize;
 
 		/**
-		*	@brief Size in bits of a long long.
+		*	@brief Size in bits of a long long (and by extension, an unsigned long long).
 		*/
 		std::size_t longlongSize;
 	};

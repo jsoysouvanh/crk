@@ -8,6 +8,7 @@
 #pragma once
 
 #include <string>
+#include <cstdint>
 
 #include <crk/Misc/Endianness.h>
 #include <crk/Misc/System.h>
@@ -19,9 +20,10 @@
 #define CRK_TESTS_ARITHMETIC_DATA_BOOL			true
 
 //Characters
-#define CRK_TESTS_ARITHMETIC_DATA_CHAR			'a'
+#define CRK_TESTS_ARITHMETIC_DATA_CHAR			(char)'a'
 #define CRK_TESTS_ARITHMETIC_DATA_SCHAR			(signed char)'b'
 #define CRK_TESTS_ARITHMETIC_DATA_UCHAR			(unsigned char)'c'
+//TODO: add char8, char16, char32, wchar_t
 
 //Integers
 #define CRK_TESTS_ARITHMETIC_DATA_SHORT			(short)-1
@@ -32,6 +34,16 @@
 #define CRK_TESTS_ARITHMETIC_DATA_ULONG			4ul
 #define CRK_TESTS_ARITHMETIC_DATA_LONGLONG		-5ll
 #define CRK_TESTS_ARITHMETIC_DATA_ULONGLONG		5ull
+
+//Fixed-width integers
+#define CRK_TESTS_ARITHMETIC_DATA_INT8			(int8_t)-127
+#define CRK_TESTS_ARITHMETIC_DATA_UINT8			(uint8_t)128
+#define CRK_TESTS_ARITHMETIC_DATA_INT16			(int16_t)-512
+#define CRK_TESTS_ARITHMETIC_DATA_UINT16		(uint16_t)512
+#define CRK_TESTS_ARITHMETIC_DATA_INT32			(int32_t)-1024
+#define CRK_TESTS_ARITHMETIC_DATA_UINT32		(uint32_t)1024
+#define CRK_TESTS_ARITHMETIC_DATA_INT64			(int64_t)-2048
+#define CRK_TESTS_ARITHMETIC_DATA_UINT64		(uint64_t)2048
 
 //Real floating
 #define CRK_TESTS_ARITHMETIC_DATA_FLOAT			0.42f

@@ -161,6 +161,19 @@ CRK_TESTS_UNPACK_NEXT_DATA(longlong, CRK_TESTS_ARITHMETIC_DATA_LONGLONG)
 CRK_TESTS_UNPACK_NEXT_DATA(ulonglong, CRK_TESTS_ARITHMETIC_DATA_ULONGLONG)
 
 //=======================================================
+//=== InBinaryArchive::unpack(fixed-width int types) ====
+//=======================================================
+
+CRK_TESTS_UNPACK_NEXT_DATA(int8_t, CRK_TESTS_ARITHMETIC_DATA_INT8)
+CRK_TESTS_UNPACK_NEXT_DATA(uint8_t, CRK_TESTS_ARITHMETIC_DATA_UINT8)
+CRK_TESTS_UNPACK_NEXT_DATA(int16_t, CRK_TESTS_ARITHMETIC_DATA_INT16)
+CRK_TESTS_UNPACK_NEXT_DATA(uint16_t, CRK_TESTS_ARITHMETIC_DATA_UINT16)
+CRK_TESTS_UNPACK_NEXT_DATA(int32_t, CRK_TESTS_ARITHMETIC_DATA_INT32)
+CRK_TESTS_UNPACK_NEXT_DATA(uint32_t, CRK_TESTS_ARITHMETIC_DATA_UINT32)
+CRK_TESTS_UNPACK_NEXT_DATA(int64_t, CRK_TESTS_ARITHMETIC_DATA_INT64)
+CRK_TESTS_UNPACK_NEXT_DATA(uint64_t, CRK_TESTS_ARITHMETIC_DATA_UINT64)
+
+//=======================================================
 //======= InBinaryArchive::unpack(floating types) =======
 //=======================================================
 
