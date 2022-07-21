@@ -14,6 +14,7 @@
 #include "crk/Archives/Binary/BinaryArchive.h"
 #include "crk/Archives/Binary/FundamentalTypes/IntegerTraits.h"
 #include "crk/Archives/Binary/DataModel/DataModelTypeMapping.h"
+#include "crk/Archives/Binary/FundamentalTypes/Formats/Integer/IntegerFormatConversions.h"
 #include "crk/Misc/Endianness.h"
 #include "crk/Misc/TypeConcepts.h"
 
@@ -116,31 +117,38 @@ namespace crk
 			}
 	};
 
-	template <Integer T, std::size_t Size, EEndianness Endianness, DataModel DataModel>
-	void serialize(OutBinaryArchive<Size, Endianness, DataModel>& archive, T const& object)
+	template <Integer T, std::size_t Size, EEndianness Endianness, DataModel _DataModel>
+	void serialize(OutBinaryArchive<Size, Endianness, _DataModel>& archive, T const& object)
 	{
 		//Retrieve the integer type from the DataModel
-		using SerializedIntegerType = decltype(DataModelTypeMapping<DataModel>::template getMappedType<T>());
+		using SerializedIntegerType = decltype(DataModelTypeMapping<_DataModel>::template getMappedType<T>());
 
-		//TODO: Perform encoding conversion
+		//Cast the provided integer to another integer matching the size of the DataModel
+		SerializedIntegerType serializedObject = static_cast<SerializedIntegerType>(object);
 
-		//Cast the provided integer to the retrieved integer type + convert endianness
-		SerializedIntegerType endiannessSwappedObject = Endianness::convert<Endianness::getNativeEndianness(), Endianness>(static_cast<SerializedIntegerType>(object));
+		//Perform encoding conversion
+		serializedObject = convertIntegerFormat<NativeIntegerFormat, typename decltype(_DataModel)::UsedIntegerFormat>(serializedObject);
+
+		//Convert endianness
+		serializedObject = Endianness::convert<Endianness::getNativeEndianness(), Endianness>(serializedObject);
 
 		//Write binary to archive
-		archive.appendBinaryChunk(reinterpret_cast<std::byte const*>(std::addressof(endiannessSwappedObject)), sizeof(SerializedIntegerType));
+		archive.appendBinaryChunk(reinterpret_cast<std::byte const*>(std::addressof(serializedObject)), sizeof(SerializedIntegerType));
 	}
 
-	template <FixedWidthInteger T, std::size_t Size, EEndianness Endianness, DataModel DataModel>
-	void serialize(OutBinaryArchive<Size, Endianness, DataModel>& archive, T const& object)
+	template <FixedWidthInteger T, std::size_t Size, EEndianness Endianness, DataModel _DataModel>
+	void serialize(OutBinaryArchive<Size, Endianness, _DataModel>& archive, T const& object)
 	{
-		//TODO: Perform encoding conversion
+		using UnderlyingIntegerType = typename T::WrappedType;
 
-		//Cast the provided integer to the retrieved integer type + convert endianness
-		T endiannessSwappedObject = Endianness::convert<Endianness::getNativeEndianness(), Endianness>(static_cast<typename T::WrappedType>(object));
+		//Perform encoding conversion
+		UnderlyingIntegerType serializedObject = convertIntegerFormat<NativeIntegerFormat, typename decltype(_DataModel)::UsedIntegerFormat>(static_cast<UnderlyingIntegerType>(object));
+
+		//Convert endianness
+		serializedObject = Endianness::convert<Endianness::getNativeEndianness(), Endianness>(serializedObject);
 
 		//Write binary to archive
-		archive.appendBinaryChunk(reinterpret_cast<std::byte const*>(std::addressof(endiannessSwappedObject)), sizeof(T));
+		archive.appendBinaryChunk(reinterpret_cast<std::byte const*>(std::addressof(serializedObject)), sizeof(UnderlyingIntegerType));
 	}
 
 	template <Character T, std::size_t Size, EEndianness Endianness, DataModel DataModel>

@@ -8,13 +8,13 @@
 #pragma once
 
 #include <cassert>
-#include <type_traits>	//std::is_arithmetic_v, std::enable_if_t...
 #include <fstream>		//std::ifstream
 #include <cstring>		//std::memcpy
 
 #include "crk/Archives/Binary/BinaryArchive.h"
 #include "crk/Archives/Binary/FundamentalTypes/IntegerTraits.h"
 #include "crk/Archives/Binary/DataModel/DataModelTypeMapping.h"
+#include "crk/Archives/Binary/FundamentalTypes/Formats/Integer/IntegerFormatConversions.h"
 #include "crk/Misc/Endianness.h"
 #include "crk/Misc/TypeConcepts.h"
 
@@ -110,29 +110,35 @@ namespace crk
 			}
 	};
 
-	template <Integer T, std::size_t Size, EEndianness Endianness, DataModel DataModel>
-	void deserialize(InBinaryArchive<Size, Endianness, DataModel>& archive, T& object)
+	template <Integer T, std::size_t Size, EEndianness Endianness, DataModel _DataModel>
+	void deserialize(InBinaryArchive<Size, Endianness, _DataModel>& archive, T& object)
 	{
-		using SerializedIntegerType = decltype(DataModelTypeMapping<DataModel>::template getMappedType<T>());
+		using SerializedIntegerType = decltype(DataModelTypeMapping<_DataModel>::template getMappedType<T>());
 
+		//Read raw binary into readInteger
 		SerializedIntegerType readInteger;
-
-		//TODO: Perform encoding conversion
-
 		archive.readNextBinaryChunk(sizeof(SerializedIntegerType), reinterpret_cast<std::byte*>(std::addressof(readInteger)));
+		
+		//Perform encoding conversion
+		readInteger = convertIntegerFormat<typename decltype(_DataModel)::UsedIntegerFormat, NativeIntegerFormat>(readInteger);
+
+		//Implicit cast from SerializedIntegerType to deserialized integer type
 		object = Endianness::convert<Endianness, Endianness::getNativeEndianness()>(readInteger);
 	}
 
-	template <FixedWidthInteger T, std::size_t Size, EEndianness Endianness, DataModel DataModel>
-	void deserialize(InBinaryArchive<Size, Endianness, DataModel>& archive, T& object)
+	template <FixedWidthInteger T, std::size_t Size, EEndianness Endianness, DataModel _DataModel>
+	void deserialize(InBinaryArchive<Size, Endianness, _DataModel>& archive, T& object)
 	{
 		using WrappedType = typename T::WrappedType;
 
+		//Read raw binary into readInteger
 		WrappedType readInteger;
-
-		//TODO: Perform encoding conversion
-
 		archive.readNextBinaryChunk(sizeof(WrappedType), reinterpret_cast<std::byte*>(std::addressof(readInteger)));
+		
+		//Perform encoding conversion
+		readInteger = convertIntegerFormat<typename decltype(_DataModel)::UsedIntegerFormat, NativeIntegerFormat>(readInteger);
+
+		//Implicit cast from WrappedType to deserialized integer type
 		object = Endianness::convert<Endianness, Endianness::getNativeEndianness()>(readInteger);
 	}
 

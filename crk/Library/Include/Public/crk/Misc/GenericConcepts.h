@@ -23,4 +23,10 @@ namespace crk
 							{
 								static_cast<To>(std::declval<From>());
 							};
+
+	/**
+	*	@brief Concept that accepts only (direct or indirect) child classes of a given class (doesn't accept the parent class itself).
+	*/
+	template <typename Child, typename Parent>
+	concept ChildOf = std::is_base_of_v<Parent, Child> && !std::is_same_v<Child, Parent>;
 }

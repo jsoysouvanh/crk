@@ -7,9 +7,9 @@
 
 #pragma once
 
-#include <type_traits> //std::is_base_of_v, std::is_same_v
-
 #include "crk/Config.h"
+
+#include <type_traits> //std::is_base_of_v, std::is_same_v
 
 #include "crk/Archives/Binary/FundamentalTypes/Formats/BinaryFormat.h"
 

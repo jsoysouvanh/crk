@@ -9,15 +9,20 @@
 
 #include <cstddef>	//std::size_t
 
+#include "crk/Archives/Binary/FundamentalTypes/Formats/Integer/TwosComplementIntegerFormat.h"
+#include "crk/Misc/GenericConcepts.h"
+
 namespace crk
 {
 	/**
 	*	@brief Struct defining the serialization encoding of fundamental types in an archive.
 	*/
 	//TODO: Add encoding/format as well
-	//template <IntegerFormat, FloatFormat, DoubleFormat, LongDoubleFormat>
+	template <ChildOf<IntegerFormat> IntegerFormat>
 	struct DataModel
 	{
+		using UsedIntegerFormat = IntegerFormat;
+
 		/**
 		*	@brief Size in bits of a short (and by extension, an unsigned short).
 		*/
@@ -39,7 +44,7 @@ namespace crk
 		std::size_t longlongSize;
 	};
 
-	constexpr DataModel LP32DataModel =
+	constexpr DataModel<TwosComplementIntegerFormat> LP32DataModel =
 	{
 		.shortSize		= 16u,
 		.intSize		= 16u,
@@ -48,7 +53,7 @@ namespace crk
 	};
 
 	//Equivalent to ILP32
-	constexpr DataModel LLP64DataModel =
+	constexpr DataModel<TwosComplementIntegerFormat> LLP64DataModel =
 	{
 		.shortSize		= 16u,
 		.intSize		= 32u,
@@ -56,7 +61,7 @@ namespace crk
 		.longlongSize	= 64u
 	};
 
-	constexpr DataModel LP64DataModel =
+	constexpr DataModel<TwosComplementIntegerFormat> LP64DataModel =
 	{
 		.shortSize		= 16u,
 		.intSize		= 32u,

@@ -24,6 +24,11 @@ namespace crk
 					  std::is_same_v<T, unsigned long long>;
 
 	template <typename T>
+	concept IntegerOrInt8 = Integer<T> ||
+							std::is_same_v<T, std::int8_t> ||
+							std::is_same_v<T, std::uint8_t>;
+
+	template <typename T>
 	concept FixedWidthInteger = std::is_same_v<T, crk::int8> ||
 								std::is_same_v<T, crk::uint8> ||
 								std::is_same_v<T, crk::int16> ||

@@ -14,11 +14,11 @@
 namespace crk
 {
 	template <typename FromIntegerFormat, typename ToIntegerFormat>
-	auto convertIntegerFormat(Integer auto integer);
+	auto convertIntegerFormat(IntegerOrInt8 auto integer);
 
 	//No format conversion, return the passed value as is
 	template <typename FromIntegerFormat, typename ToIntegerFormat>
-	auto convertIntegerFormat(Integer auto integer)
+	auto convertIntegerFormat(IntegerOrInt8 auto integer)
 		requires SameAs<FromIntegerFormat, ToIntegerFormat>
 	{
 		return integer;
