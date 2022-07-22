@@ -23,7 +23,10 @@
 #define CRK_TESTS_ARITHMETIC_DATA_CHAR			(char)'a'
 #define CRK_TESTS_ARITHMETIC_DATA_SCHAR			(signed char)'b'
 #define CRK_TESTS_ARITHMETIC_DATA_UCHAR			(unsigned char)'c'
-//TODO: add char8, char16, char32, wchar_t
+#define CRK_TESTS_ARITHMETIC_DATA_CHAR8			(char8_t)'d'
+#define CRK_TESTS_ARITHMETIC_DATA_CHAR16		(char16_t)'e'
+#define CRK_TESTS_ARITHMETIC_DATA_CHAR32		(char32_t)'f'
+#define CRK_TESTS_ARITHMETIC_DATA_WCHAR			(wchar_t)'g'
 
 //Integers
 #define CRK_TESTS_ARITHMETIC_DATA_SHORT			(short)-1
