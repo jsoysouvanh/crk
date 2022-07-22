@@ -1,303 +1,13 @@
 #include <gtest/gtest.h>
 
-#include <cstring>	//std::memcpy
+#include <cstring>	//std::memcpy, std::memcmp
+#include <array>
 
 #include "TestHelpers/EndiannessHelpers.h"
 
 //It's complicated to test getNativeEndianness, so skip this test
 
-//=======================================================
-//============= Endianness::convert(bool) ===============
-//=======================================================
-
-TEST(Endianness_convert_bool, LittleToBig)
-{
-	//bool size is implementation defined so it's complicated to test, but consider sizeof(bool) == 1 for this test
-	EXPECT_EQ((crk::Endianness::convert<crk::EEndianness::Little, crk::EEndianness::Big>((bool)0x01)), (bool)0x01);
-}
-
-TEST(Endianness_convert_bool, BigToLittle)
-{
-	//bool size is implementation defined so it's complicated to test, but consider sizeof(bool) == 1 for this test
-	EXPECT_EQ((crk::Endianness::convert<crk::EEndianness::Big, crk::EEndianness::Little>((bool)0x01)), (bool)0x01);
-}
-
-TEST(Endianness_convert_bool, BigToBig)
-{
-	//bool size is implementation defined so it's complicated to test, but consider sizeof(bool) == 1 for this test
-	EXPECT_EQ((crk::Endianness::convert<crk::EEndianness::Big, crk::EEndianness::Big>((bool)0x01)), (bool)0x01);
-}
-
-TEST(Endianness_convert_bool, LittleToLittle)
-{
-	//bool size is implementation defined so it's complicated to test, but consider sizeof(bool) == 1 for this test
-	EXPECT_EQ((crk::Endianness::convert<crk::EEndianness::Little, crk::EEndianness::Little>((bool)0x01)), (bool)0x01);
-}
-
-//=======================================================
-//============= Endianness::convert(char) ===============
-//=======================================================
-
-TEST(Endianness_convert_char, LittleToBig)
-{
-	EXPECT_EQ((crk::Endianness::convert<crk::EEndianness::Little, crk::EEndianness::Big>((char)0x01)), (char)0x01);
-}
-
-TEST(Endianness_convert_char, BigToLittle)
-{
-	EXPECT_EQ((crk::Endianness::convert<crk::EEndianness::Big, crk::EEndianness::Little>((char)0x01)), (char)0x01);
-}
-
-TEST(Endianness_convert_char, BigToBig)
-{
-	EXPECT_EQ((crk::Endianness::convert<crk::EEndianness::Big, crk::EEndianness::Big>((char)0x01)), (char)0x01);
-}
-
-TEST(Endianness_convert_char, LittleToLittle)
-{
-	EXPECT_EQ((crk::Endianness::convert<crk::EEndianness::Little, crk::EEndianness::Little>((char)0x01)), (char)0x01);
-}
-
-//=======================================================
-//=========== Endianness::convert(int16_t) ==============
-//=======================================================
-
-TEST(Endianness_convert_int16, LittleToBig)
-{
-	EXPECT_EQ((crk::Endianness::convert<crk::EEndianness::Little, crk::EEndianness::Big>((int16_t)0x0123)), (int16_t)0x2301);
-}
-
-TEST(Endianness_convert_int16, BigToLittle)
-{
-	EXPECT_EQ((crk::Endianness::convert<crk::EEndianness::Big, crk::EEndianness::Little>((int16_t)0x0123)), (int16_t)0x2301);
-}
-
-TEST(Endianness_convert_int16, BigToBig)
-{
-	EXPECT_EQ((crk::Endianness::convert<crk::EEndianness::Big, crk::EEndianness::Big>((int16_t)0x0123)), (int16_t)0x0123);
-}
-
-TEST(Endianness_convert_int16, LittleToLittle)
-{
-	EXPECT_EQ((crk::Endianness::convert<crk::EEndianness::Little, crk::EEndianness::Little>((int16_t)0x0123)), (int16_t)0x0123);
-}
-
-//=======================================================
-//=========== Endianness::convert(uint16_t) =============
-//=======================================================
-
-TEST(Endianness_convert_uint16, LittleToBig)
-{
-	EXPECT_EQ((crk::Endianness::convert<crk::EEndianness::Little, crk::EEndianness::Big>((uint16_t)0x0123)), (uint16_t)0x2301);
-}
-
-TEST(Endianness_convert_uint16, BigToLittle)
-{
-	EXPECT_EQ((crk::Endianness::convert<crk::EEndianness::Big, crk::EEndianness::Little>((uint16_t)0x0123)), (uint16_t)0x2301);
-}
-
-TEST(Endianness_convert_uint16, BigToBig)
-{
-	EXPECT_EQ((crk::Endianness::convert<crk::EEndianness::Big, crk::EEndianness::Big>((uint16_t)0x0123)), (uint16_t)0x0123);
-}
-
-TEST(Endianness_convert_uint16, LittleToLittle)
-{
-	EXPECT_EQ((crk::Endianness::convert<crk::EEndianness::Little, crk::EEndianness::Little>((uint16_t)0x0123)), (uint16_t)0x0123);
-}
-
-//=======================================================
-//=========== Endianness::convert(int32_t) ==============
-//=======================================================
-
-TEST(Endianness_convert_int32, LittleToBig)
-{
-	EXPECT_EQ((crk::Endianness::convert<crk::EEndianness::Little, crk::EEndianness::Big>((int32_t)0x01234567)), (int32_t)0x67452301);
-}
-
-TEST(Endianness_convert_int32, BigToLittle)
-{
-	EXPECT_EQ((crk::Endianness::convert<crk::EEndianness::Big, crk::EEndianness::Little>((int32_t)0x01234567)), (int32_t)0x67452301);
-}
-
-TEST(Endianness_convert_int32, BigToBig)
-{
-	EXPECT_EQ((crk::Endianness::convert<crk::EEndianness::Big, crk::EEndianness::Big>((int32_t)0x01234567)), (int32_t)0x01234567);
-}
-
-TEST(Endianness_convert_int32, LittleToLittle)
-{
-	EXPECT_EQ((crk::Endianness::convert<crk::EEndianness::Little, crk::EEndianness::Little>((int32_t)0x01234567)), (int32_t)0x01234567);
-}
-
-//=======================================================
-//=========== Endianness::convert(uint32_t) =============
-//=======================================================
-
-TEST(Endianness_convert_uint32, LittleToBig)
-{
-	EXPECT_EQ((crk::Endianness::convert<crk::EEndianness::Little, crk::EEndianness::Big>((uint32_t)0x01234567)), (uint32_t)0x67452301);
-}
-
-TEST(Endianness_convert_uint32, BigToLittle)
-{
-	EXPECT_EQ((crk::Endianness::convert<crk::EEndianness::Little, crk::EEndianness::Big>((uint32_t)0x01234567)), (uint32_t)0x67452301);
-}
-
-TEST(Endianness_convert_uint32, BigToBig)
-{
-	EXPECT_EQ((crk::Endianness::convert<crk::EEndianness::Big, crk::EEndianness::Big>((uint32_t)0x01234567)), (uint32_t)0x01234567);
-}
-
-TEST(Endianness_convert_uint32, LittleToLittle)
-{
-	EXPECT_EQ((crk::Endianness::convert<crk::EEndianness::Little, crk::EEndianness::Little>((int32_t)0x01234567)), (int32_t)0x01234567);
-}
-
-//=======================================================
-//========== Endianness::convert(int64_t) ==============
-//=======================================================
-
-TEST(Endianness_convert_int64, LittleToBig)
-{
-	EXPECT_EQ((crk::Endianness::convert<crk::EEndianness::Little, crk::EEndianness::Big>((int64_t)0x0123456789ABCDEF)), (int64_t)0xEFCDAB8967452301);
-}
-
-TEST(Endianness_convert_int64, BigToLittle)
-{
-	EXPECT_EQ((crk::Endianness::convert<crk::EEndianness::Big, crk::EEndianness::Little>((int64_t)0x0123456789ABCDEF)), (int64_t)0xEFCDAB8967452301);
-}
-
-TEST(Endianness_convert_int64, BigToBig)
-{
-	EXPECT_EQ((crk::Endianness::convert<crk::EEndianness::Big, crk::EEndianness::Big>((int64_t)0x0123456789ABCDEF)), (int64_t)0x0123456789ABCDEF);
-}
-
-TEST(Endianness_convert_int64, LittleToLittle)
-{
-	EXPECT_EQ((crk::Endianness::convert<crk::EEndianness::Little, crk::EEndianness::Little>((int64_t)0x0123456789ABCDEF)), (int64_t)0x0123456789ABCDEF);
-}
-
-//=======================================================
-//========== Endianness::convert(uint64_t) ==============
-//=======================================================
-
-TEST(Endianness_convert_uint64, LittleToBig)
-{
-	EXPECT_EQ((crk::Endianness::convert<crk::EEndianness::Little, crk::EEndianness::Big>((uint64_t)0x0123456789ABCDEF)), (uint64_t)0xEFCDAB8967452301);
-}
-
-TEST(Endianness_convert_uint64, BigToLittle)
-{
-	EXPECT_EQ((crk::Endianness::convert<crk::EEndianness::Big, crk::EEndianness::Little>((uint64_t)0x0123456789ABCDEF)), (uint64_t)0xEFCDAB8967452301);
-}
-
-TEST(Endianness_convert_uint64, BigToBig)
-{
-	EXPECT_EQ((crk::Endianness::convert<crk::EEndianness::Big, crk::EEndianness::Big>((uint64_t)0x0123456789ABCDEF)), (uint64_t)0x0123456789ABCDEF);
-}
-
-TEST(Endianness_convert_uint64, LittleToLittle)
-{
-	EXPECT_EQ((crk::Endianness::convert<crk::EEndianness::Little, crk::EEndianness::Little>((int64_t)0x0123456789ABCDEF)), (int64_t)0x0123456789ABCDEF);
-}
-
-//=======================================================
-//============ Endianness::convert(float) ===============
-//=======================================================
-
-TEST(Endianness_convert_float, LittleToBig)
-{
-	int32_t asInt = 0x01234567;
-	float f = *reinterpret_cast<float*>(&asInt);
-
-	int32_t asInt2 = 0x67452301;
-	float f2 = *reinterpret_cast<float*>(&asInt2);
-
-	EXPECT_EQ((crk::Endianness::convert<crk::EEndianness::Little, crk::EEndianness::Big>(f)), f2);
-}
-
-TEST(Endianness_convert_float, BigToLittle)
-{
-	int32_t asInt = 0x01234567;
-	float f = *reinterpret_cast<float*>(&asInt);
-
-	int32_t asInt2 = 0x67452301;
-	float f2 = *reinterpret_cast<float*>(&asInt2);
-
-	EXPECT_EQ((crk::Endianness::convert<crk::EEndianness::Big, crk::EEndianness::Little>(f)), f2);
-}
-
-TEST(Endianness_convert_float, BigToBig)
-{
-	int32_t asInt = 0x01234567;
-	float f = *reinterpret_cast<float*>(&asInt);
-
-	EXPECT_EQ((crk::Endianness::convert<crk::EEndianness::Big, crk::EEndianness::Big>(f)), f);
-}
-
-TEST(Endianness_convert_float, LittleToLittle)
-{
-	int32_t asInt = 0x01234567;
-	float f = *reinterpret_cast<float*>(&asInt);
-
-	EXPECT_EQ((crk::Endianness::convert<crk::EEndianness::Little, crk::EEndianness::Little>(f)), f);
-}
-
-//=======================================================
-//============ Endianness::convert(double) ==============
-//=======================================================
-
-TEST(Endianness_convert_double, LittleToBig)
-{
-	int64_t asInt = 0x0123456789ABCDEF;
-	double d = *reinterpret_cast<double*>(&asInt);
-
-	int64_t asInt2 = 0xEFCDAB8967452301;
-	double d2 = *reinterpret_cast<double*>(&asInt2);
-
-	EXPECT_EQ((crk::Endianness::convert<crk::EEndianness::Little, crk::EEndianness::Big>(d)), d2);
-}
-
-TEST(Endianness_convert_double, BigToLittle)
-{
-	int64_t asInt = 0x0123456789ABCDEF;
-	double d = *reinterpret_cast<double*>(&asInt);
-
-	int64_t asInt2 = 0xEFCDAB8967452301;
-	double d2 = *reinterpret_cast<double*>(&asInt2);
-
-	EXPECT_EQ((crk::Endianness::convert<crk::EEndianness::Big, crk::EEndianness::Little>(d)), d2);
-}
-
-TEST(Endianness_convert_double, BigToBig)
-{
-	int64_t asInt = 0x0123456789ABCDEF;
-	double d = *reinterpret_cast<double*>(&asInt);
-
-	EXPECT_EQ((crk::Endianness::convert<crk::EEndianness::Big, crk::EEndianness::Big>(d)), d);
-}
-
-TEST(Endianness_convert_double, LittleToLittle)
-{
-	int64_t asInt = 0x0123456789ABCDEF;
-	double d = *reinterpret_cast<double*>(&asInt);
-
-	int64_t asInt2 = 0xEFCDAB8967452301;
-	double d2 = *reinterpret_cast<double*>(&asInt2);
-
-	EXPECT_EQ((crk::Endianness::convert<crk::EEndianness::Little, crk::EEndianness::Little>(d)), d);
-}
-
-//=======================================================
-//========== Endianness::convert(long double) ===========
-//=======================================================
-
-//32 bytes is the longest size for IEEE norm (binary256 / octuple precision).
-//long double are not guaranteed to follow the IEEE norm but implementions are not
-//likely to have sizeof(long double) > 32 so it should cover enough cases for the unit test.
-
-constexpr std::byte const longDoubleByteArray[32] =
+constexpr std::array<std::byte, 32> const byteArray =
 {
 	std::byte{0x00}, std::byte{0x01}, std::byte{0x02}, std::byte{0x03},
 	std::byte{0x04}, std::byte{0x05}, std::byte{0x06}, std::byte{0x07},
@@ -309,7 +19,7 @@ constexpr std::byte const longDoubleByteArray[32] =
 	std::byte{0x1C}, std::byte{0x1D}, std::byte{0x1E}, std::byte{0x1F}
 };
 
-constexpr std::byte const longDoubleByteArrayReversed[32] = 
+constexpr std::array<std::byte, 32> const byteArrayReversed = 
 {
 	std::byte{0x1F}, std::byte{0x1E}, std::byte{0x1D}, std::byte{0x1C},
 	std::byte{0x1B}, std::byte{0x1A}, std::byte{0x19}, std::byte{0x18},
@@ -321,43 +31,114 @@ constexpr std::byte const longDoubleByteArrayReversed[32] =
 	std::byte{0x03}, std::byte{0x02}, std::byte{0x01}, std::byte{0x00}
 };
 
-TEST(Endianness_convert_longdouble, LittleToBig)
+template <typename T>
+void initData(T* data)
 {
-	long double ld;
-	std::memcpy(&ld, longDoubleByteArray, sizeof(long double));
+	static_assert(sizeof(T) <= byteArray.size(), "T is bigger than the reference array, must increase byteArray size.");
 
-	long double ld2;
-	std::memcpy(&ld2, &longDoubleByteArrayReversed[32 - sizeof(long double)], sizeof(long double));
-
-	EXPECT_EQ((crk::Endianness::convert<crk::EEndianness::Little, crk::EEndianness::Big>(ld)), ld2);
+	std::memcpy(data, byteArray.data(), sizeof(T));
 }
 
-TEST(Endianness_convert_longdouble, BigToLittle)
+template <typename T>
+void initReversedData(T* data)
 {
-	long double ld;
-	std::memcpy(&ld, longDoubleByteArray, sizeof(long double));
+	static_assert(sizeof(T) <= byteArrayReversed.size(), "T is bigger than the reference array, must increase byteArrayReversed size.");
 
-	long double ld2;
-	std::memcpy(&ld2, &longDoubleByteArrayReversed[32 - sizeof(long double)], sizeof(long double));
-
-	EXPECT_EQ((crk::Endianness::convert<crk::EEndianness::Big, crk::EEndianness::Little>(ld2)), ld);
+	std::memcpy(data, &byteArrayReversed[byteArrayReversed.size() - sizeof(T)], sizeof(T));
 }
 
-TEST(Endianness_convert_longdouble, BigToBig)
+template <typename T>
+bool equalBinary(T const& d1, T const& d2) noexcept
 {
-	long double ld;
-	std::memcpy(&ld, longDoubleByteArray, sizeof(long double));
-
-	EXPECT_EQ((crk::Endianness::convert<crk::EEndianness::Big, crk::EEndianness::Big>(ld)), ld);
+	return std::memcmp(&d1, &d2, sizeof(T)) == 0;
 }
 
-TEST(Endianness_convert_longdouble, LittleToLittle)
+template <typename T>
+class FundamentalTypeEndiannessConversion : public ::testing::Test
 {
-	long double ld;
-	std::memcpy(&ld, longDoubleByteArray, sizeof(long double));
+	protected:
+		T data;
+		T dataReversed;
 
-	EXPECT_EQ((crk::Endianness::convert<crk::EEndianness::Little, crk::EEndianness::Little>(ld)), ld);
-}
+		virtual void SetUp() override
+		{
+			initData(&data);
+			initReversedData(&dataReversed);
+		}
+};
+
+#define INSTANTIATE_ENDIANNESS_TESTS_FOR_TYPE(type)																					\
+	class type##EndiannessConversion : public FundamentalTypeEndiannessConversion<type> {};											\
+																																	\
+	TEST_F(type##EndiannessConversion, LittleToBig)																					\
+	{																																\
+		EXPECT_TRUE(equalBinary(crk::Endianness::convert<crk::EEndianness::Little, crk::EEndianness::Big>(data), dataReversed));	\
+	}																																\
+																																	\
+	TEST_F(type##EndiannessConversion, BigToLittle)																					\
+	{																																\
+		EXPECT_TRUE(equalBinary(crk::Endianness::convert<crk::EEndianness::Big, crk::EEndianness::Little>(data), dataReversed));	\
+	}																																\
+																																	\
+	TEST_F(type##EndiannessConversion, BigToBig)																					\
+	{																																\
+		EXPECT_TRUE(equalBinary(crk::Endianness::convert<crk::EEndianness::Big, crk::EEndianness::Big>(data), data));				\
+	}																																\
+																																	\
+	TEST_F(type##EndiannessConversion, LittleToLittle)																				\
+	{																																\
+		EXPECT_TRUE(equalBinary(crk::Endianness::convert<crk::EEndianness::Little, crk::EEndianness::Little>(data), data));			\
+	}																																\
+
+//=======================================================
+//=========== Endianness::convert(boolean) ==============
+//=======================================================
+
+INSTANTIATE_ENDIANNESS_TESTS_FOR_TYPE(bool)
+
+//=======================================================
+//========== Endianness::convert(character) =============
+//=======================================================
+
+using schar = signed char;
+using uchar = unsigned char;
+
+INSTANTIATE_ENDIANNESS_TESTS_FOR_TYPE(char)
+INSTANTIATE_ENDIANNESS_TESTS_FOR_TYPE(schar)
+INSTANTIATE_ENDIANNESS_TESTS_FOR_TYPE(uchar)
+INSTANTIATE_ENDIANNESS_TESTS_FOR_TYPE(char8_t)
+INSTANTIATE_ENDIANNESS_TESTS_FOR_TYPE(char16_t)
+INSTANTIATE_ENDIANNESS_TESTS_FOR_TYPE(char32_t)
+INSTANTIATE_ENDIANNESS_TESTS_FOR_TYPE(wchar_t)
+
+//=======================================================
+//=========== Endianness::convert(integer) ==============
+//=======================================================
+
+using ushort = unsigned short;
+using uint = unsigned int;
+using ulong = unsigned long;
+using longlong = long long;
+using ulonglong = unsigned long long;
+
+INSTANTIATE_ENDIANNESS_TESTS_FOR_TYPE(short)
+INSTANTIATE_ENDIANNESS_TESTS_FOR_TYPE(ushort)
+INSTANTIATE_ENDIANNESS_TESTS_FOR_TYPE(int)
+INSTANTIATE_ENDIANNESS_TESTS_FOR_TYPE(uint)
+INSTANTIATE_ENDIANNESS_TESTS_FOR_TYPE(long)
+INSTANTIATE_ENDIANNESS_TESTS_FOR_TYPE(ulong)
+INSTANTIATE_ENDIANNESS_TESTS_FOR_TYPE(longlong)
+INSTANTIATE_ENDIANNESS_TESTS_FOR_TYPE(ulonglong)
+
+//=======================================================
+//======== Endianness::convert(floating-point) ==========
+//=======================================================
+
+using longdouble = long double;
+
+INSTANTIATE_ENDIANNESS_TESTS_FOR_TYPE(float)
+INSTANTIATE_ENDIANNESS_TESTS_FOR_TYPE(double)
+INSTANTIATE_ENDIANNESS_TESTS_FOR_TYPE(longdouble)
 
 int main(int argc, char** argv)
 {
