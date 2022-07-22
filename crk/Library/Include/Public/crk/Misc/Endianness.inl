@@ -272,7 +272,7 @@ constexpr EEndianness Endianness::getNativeEndianness() noexcept
 #endif
 }
 
-template <EEndianness SourceEndianness, EEndianness TargetEndianness, Arithmetic T>
+template <EEndianness SourceEndianness, EEndianness TargetEndianness, typename T>
 T Endianness::convert(T v) noexcept
 {
 	static_assert(!(isUnknownConversion<SourceEndianness, TargetEndianness>()	||

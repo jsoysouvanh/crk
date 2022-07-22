@@ -30,7 +30,6 @@
 #endif
 
 #include "crk/Misc/EEndianness.h"
-#include "crk/Misc/TypeConcepts.h"
 
 namespace crk
 {
@@ -164,17 +163,17 @@ namespace crk
 			CRK_NODISCARD static constexpr EEndianness	getNativeEndianness()	noexcept;
 
 			/**
-			*	@brief Convert an arithmetic object to a specific endianness.
+			*	@brief	Convert an object to a specific endianness.
 			* 
 			*	@tparam SourceEndianness	Source endianness.
 			*	@tparam TargetEndianness	Target endianness.
-			*	@tparam T					Type of the (arithmetic) object to convert.
+			*	@tparam T					Type of the object to convert.
 			* 
 			*	@param v Object to convert.
 			* 
 			*	@return The object converted to the specified endianness.
 			*/
-			template <EEndianness SourceEndianness, EEndianness TargetEndianness, Arithmetic T>
+			template <EEndianness SourceEndianness, EEndianness TargetEndianness, typename T>
 			CRK_NODISCARD static T						convert(T v)			noexcept;
 	};
 

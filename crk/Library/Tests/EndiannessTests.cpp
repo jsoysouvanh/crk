@@ -2,6 +2,9 @@
 
 #include <cstring>	//std::memcpy, std::memcmp
 #include <array>
+#include <iostream>
+#include <iomanip>	//std::setfill, std::setw
+#include <ios>		//std::hex, std::dec
 
 #include "TestHelpers/EndiannessHelpers.h"
 
@@ -67,28 +70,74 @@ class FundamentalTypeEndiannessConversion : public ::testing::Test
 		}
 };
 
-#define INSTANTIATE_ENDIANNESS_TESTS_FOR_TYPE(type)																					\
-	class type##EndiannessConversion : public FundamentalTypeEndiannessConversion<type> {};											\
-																																	\
-	TEST_F(type##EndiannessConversion, LittleToBig)																					\
-	{																																\
-		EXPECT_TRUE(equalBinary(crk::Endianness::convert<crk::EEndianness::Little, crk::EEndianness::Big>(data), dataReversed));	\
-	}																																\
-																																	\
-	TEST_F(type##EndiannessConversion, BigToLittle)																					\
-	{																																\
-		EXPECT_TRUE(equalBinary(crk::Endianness::convert<crk::EEndianness::Big, crk::EEndianness::Little>(data), dataReversed));	\
-	}																																\
-																																	\
-	TEST_F(type##EndiannessConversion, BigToBig)																					\
-	{																																\
-		EXPECT_TRUE(equalBinary(crk::Endianness::convert<crk::EEndianness::Big, crk::EEndianness::Big>(data), data));				\
-	}																																\
-																																	\
-	TEST_F(type##EndiannessConversion, LittleToLittle)																				\
-	{																																\
-		EXPECT_TRUE(equalBinary(crk::Endianness::convert<crk::EEndianness::Little, crk::EEndianness::Little>(data), data));			\
-	}																																\
+//--- Debug
+
+template <typename T>
+class HexaPrintWrapper
+{
+	private:
+		T _wrappedValue;
+
+	public:
+		HexaPrintWrapper(T value):
+			_wrappedValue{ value }
+		{}
+
+		T const& getWrappedValue() const noexcept
+		{
+			return _wrappedValue;
+		}
+};
+
+template <typename T>
+std::ostream& operator<<(std::ostream& stream, HexaPrintWrapper<T> const& wrapper) noexcept
+{
+	std::byte const* bytes = reinterpret_cast<std::byte const*>(&wrapper.getWrappedValue());
+
+	for (int i = 0; i < sizeof(T); ++i)
+		stream << std::hex << std::setfill('0') << std::setw(2) << (int)bytes[i] << " ";
+
+	stream << std::dec << std::endl;
+
+	return stream;
+}
+
+//----
+
+#define INSTANTIATE_ENDIANNESS_TESTS_FOR_TYPE(type)																								\
+	class type##EndiannessConversion : public FundamentalTypeEndiannessConversion<type> {};														\
+																																				\
+	TEST_F(type##EndiannessConversion, LittleToBig)																								\
+	{																																			\
+		EXPECT_TRUE(equalBinary(crk::Endianness::convert<crk::EEndianness::Little, crk::EEndianness::Big>(data), dataReversed)) <<				\
+			HexaPrintWrapper(data) << " <- From" << std::endl <<																				\
+			HexaPrintWrapper(crk::Endianness::convert<crk::EEndianness::Little, crk::EEndianness::Big>(data)) << "<- Result" << std::endl <<	\
+			HexaPrintWrapper(dataReversed) << " <- Expected" << std::endl;																		\
+	}																																			\
+																																				\
+	TEST_F(type##EndiannessConversion, BigToLittle)																								\
+	{																																			\
+		EXPECT_TRUE(equalBinary(crk::Endianness::convert<crk::EEndianness::Big, crk::EEndianness::Little>(data), dataReversed)) <<				\
+			HexaPrintWrapper(data) << " <- From" << std::endl <<																				\
+			HexaPrintWrapper(crk::Endianness::convert<crk::EEndianness::Big, crk::EEndianness::Little>(data)) << "<- Result" << std::endl <<	\
+			HexaPrintWrapper(dataReversed) << " <- Expected" << std::endl;																		\
+	}																																			\
+																																				\
+	TEST_F(type##EndiannessConversion, BigToBig)																								\
+	{																																			\
+		EXPECT_TRUE(equalBinary(crk::Endianness::convert<crk::EEndianness::Big, crk::EEndianness::Big>(data), data)) <<							\
+			HexaPrintWrapper(data) << " <- From" << std::endl <<																				\
+			HexaPrintWrapper(crk::Endianness::convert<crk::EEndianness::Big, crk::EEndianness::Big>(data)) << "<- Result" << std::endl <<		\
+			HexaPrintWrapper(dataReversed) << " <- Expected" << std::endl;																		\
+	}																																			\
+																																				\
+	TEST_F(type##EndiannessConversion, LittleToLittle)																							\
+	{																																			\
+		EXPECT_TRUE(equalBinary(crk::Endianness::convert<crk::EEndianness::Little, crk::EEndianness::Little>(data), data)) <<					\
+			HexaPrintWrapper(data) << " <- From" << std::endl <<																				\
+			HexaPrintWrapper(crk::Endianness::convert<crk::EEndianness::Little, crk::EEndianness::Little>(data)) << "<- Result" << std::endl <<	\
+			HexaPrintWrapper(dataReversed) << " <- Expected" << std::endl;																		\
+	}																																			\
 
 //=======================================================
 //=========== Endianness::convert(boolean) ==============
