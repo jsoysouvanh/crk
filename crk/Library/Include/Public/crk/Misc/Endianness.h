@@ -9,9 +9,11 @@
 
 #include "crk/Config.h"
 
-#include <cstring>		//std::memcpy
-#include <type_traits>	//std::enable_if, std::is_arithmetic
-#include <cstdlib>		//builtin bswaps for both MSVC (_byteswap_ushort...) and GNU compilers (__builtin_bswap16...)
+#include <cstdlib>	//builtin bswaps for both MSVC (_byteswap_ushort...) and GNU compilers (__builtin_bswap16...)
+#include <climits>	//CHAR_BIT
+#include <bit>		//std::byte
+#include <utility>	//std::swap
+#include <cstdint>
 
 #if CRK_CPP20
 	#include <bit> //std::endian

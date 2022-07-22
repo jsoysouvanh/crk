@@ -102,12 +102,11 @@ inline uint64_t Endianness::byteSwap64(uint64_t v) noexcept
 template <typename T>
 T Endianness::byteSwap(T v) noexcept
 {
-	if constexpr (sizeof(T) == 1u)			//8 bits
+	if constexpr (sizeof(T) * CHAR_BIT == 8u)
 	{
 		return v;
 	}
-	//use memcpy to avoid breaking strict-aliasing rules for C++ with reinterpret_cast
-	else if constexpr (sizeof(T) == 2u)		//16 bits
+	else if constexpr (sizeof(T) * CHAR_BIT == 16u)
 	{
 		uint16_t tmp;
 		std::memcpy(&tmp, &v, sizeof(uint16_t));
@@ -115,7 +114,7 @@ T Endianness::byteSwap(T v) noexcept
 		std::memcpy(&v, &tmp, sizeof(uint16_t));
 		return v;
 	}
-	else if constexpr (sizeof(T) == 4u)		//32 bits
+	else if constexpr (sizeof(T) * CHAR_BIT == 32u)
 	{
 		uint32_t tmp;
 		std::memcpy(&tmp, &v, sizeof(uint32_t));
@@ -123,7 +122,7 @@ T Endianness::byteSwap(T v) noexcept
 		std::memcpy(&v, &tmp, sizeof(uint32_t));
 		return v;
 	}
-	else if constexpr (sizeof(T) == 8u)		//64 bits
+	else if constexpr (sizeof(T) * CHAR_BIT == 64u)
 	{
 		uint64_t tmp;
 		std::memcpy(&tmp, &v, sizeof(uint64_t));
@@ -131,10 +130,15 @@ T Endianness::byteSwap(T v) noexcept
 		std::memcpy(&v, &tmp, sizeof(uint64_t));
 		return v;
 	}
-	//TODO: Add support for 128 byteswap? with _mm_shuffle_epi8?
-	else
+	else //Fallback implementation for any size type
 	{
-		//TODO: Fallback implementation for any size type
+		std::byte* byteArray = reinterpret_cast<std::byte*>(&v);
+
+		for (std::size_t byteIndex = 0; byteIndex < sizeof(T) / 2u; byteIndex++)
+		{
+			std::swap(byteArray[byteIndex], byteArray[sizeof(T) - byteIndex - 1u]);
+		}
+
 		return v;
 	}
 }

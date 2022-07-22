@@ -1,5 +1,7 @@
 #include <gtest/gtest.h>
 
+#include <cstring>	//std::memcpy
+
 #include "TestHelpers/EndiannessHelpers.h"
 
 //It's complicated to test getNativeEndianness, so skip this test
@@ -291,21 +293,71 @@ TEST(Endianness_convert_double, LittleToLittle)
 //========== Endianness::convert(long double) ===========
 //=======================================================
 
-//TEST(Endianness_convert_longdouble, LittleToBig)
-//{
-//}
+//32 bytes is the longest size for IEEE norm (binary256 / octuple precision).
+//long double are not guaranteed to follow the IEEE norm but implementions are not
+//likely to have sizeof(long double) > 32 so it should cover enough cases for the unit test.
 
-//TEST(Endianness_convert_longdouble, BigToLittle)
-//{
-//}
-//
-//TEST(Endianness_convert_longdouble, BigToBig)
-//{
-//}
-//
-//TEST(Endianness_convert_longdouble, LittleToLittle)
-//{
-//}
+constexpr std::byte const longDoubleByteArray[32] =
+{
+	std::byte{0x00}, std::byte{0x01}, std::byte{0x02}, std::byte{0x03},
+	std::byte{0x04}, std::byte{0x05}, std::byte{0x06}, std::byte{0x07},
+	std::byte{0x08}, std::byte{0x09}, std::byte{0x0A}, std::byte{0x0B},
+	std::byte{0x0C}, std::byte{0x0D}, std::byte{0x0E}, std::byte{0x0F},
+	std::byte{0x10}, std::byte{0x11}, std::byte{0x12}, std::byte{0x13},
+	std::byte{0x14}, std::byte{0x15}, std::byte{0x16}, std::byte{0x17},
+	std::byte{0x18}, std::byte{0x19}, std::byte{0x1A}, std::byte{0x1B},
+	std::byte{0x1C}, std::byte{0x1D}, std::byte{0x1E}, std::byte{0x1F}
+};
+
+constexpr std::byte const longDoubleByteArrayReversed[32] = 
+{
+	std::byte{0x1F}, std::byte{0x1E}, std::byte{0x1D}, std::byte{0x1C},
+	std::byte{0x1B}, std::byte{0x1A}, std::byte{0x19}, std::byte{0x18},
+	std::byte{0x17}, std::byte{0x16}, std::byte{0x15}, std::byte{0x14},
+	std::byte{0x13}, std::byte{0x12}, std::byte{0x11}, std::byte{0x10},
+	std::byte{0x0F}, std::byte{0x0E}, std::byte{0x0D}, std::byte{0x0C},
+	std::byte{0x0B}, std::byte{0x0A}, std::byte{0x09}, std::byte{0x08},
+	std::byte{0x07}, std::byte{0x06}, std::byte{0x05}, std::byte{0x04},
+	std::byte{0x03}, std::byte{0x02}, std::byte{0x01}, std::byte{0x00}
+};
+
+TEST(Endianness_convert_longdouble, LittleToBig)
+{
+	long double ld;
+	std::memcpy(&ld, longDoubleByteArray, sizeof(long double));
+
+	long double ld2;
+	std::memcpy(&ld2, &longDoubleByteArrayReversed[32 - sizeof(long double)], sizeof(long double));
+
+	EXPECT_EQ((crk::Endianness::convert<crk::EEndianness::Little, crk::EEndianness::Big>(ld)), ld2);
+}
+
+TEST(Endianness_convert_longdouble, BigToLittle)
+{
+	long double ld;
+	std::memcpy(&ld, longDoubleByteArray, sizeof(long double));
+
+	long double ld2;
+	std::memcpy(&ld2, &longDoubleByteArrayReversed[32 - sizeof(long double)], sizeof(long double));
+
+	EXPECT_EQ((crk::Endianness::convert<crk::EEndianness::Big, crk::EEndianness::Little>(ld2)), ld);
+}
+
+TEST(Endianness_convert_longdouble, BigToBig)
+{
+	long double ld;
+	std::memcpy(&ld, longDoubleByteArray, sizeof(long double));
+
+	EXPECT_EQ((crk::Endianness::convert<crk::EEndianness::Big, crk::EEndianness::Big>(ld)), ld);
+}
+
+TEST(Endianness_convert_longdouble, LittleToLittle)
+{
+	long double ld;
+	std::memcpy(&ld, longDoubleByteArray, sizeof(long double));
+
+	EXPECT_EQ((crk::Endianness::convert<crk::EEndianness::Little, crk::EEndianness::Little>(ld)), ld);
+}
 
 int main(int argc, char** argv)
 {
