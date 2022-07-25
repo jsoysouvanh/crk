@@ -8,8 +8,6 @@
 
 #include "TestHelpers/EndiannessHelpers.h"
 
-//It's complicated to test getNativeEndianness, so skip this test
-
 constexpr std::array<std::byte, 32> const byteArray =
 {
 	std::byte{0x00}, std::byte{0x01}, std::byte{0x02}, std::byte{0x03},
@@ -142,6 +140,12 @@ std::ostream& operator<<(std::ostream& stream, HexaPrintWrapper<T> const& wrappe
 	INSTANTIATE_ENDIANNESS_CONVERTREF_TEST(type, Big, Little, data, dataReversed)																\
 	INSTANTIATE_ENDIANNESS_CONVERTREF_TEST(type, Big, Big, data, data)																			\
 	INSTANTIATE_ENDIANNESS_CONVERTREF_TEST(type, Little, Little, data, data)
+
+//=======================================================
+//============ Actual tests start here!!! ===============
+//=======================================================
+
+//It's complicated to test getNativeEndianness, so skip this test
 
 //=======================================================
 //=========== Endianness::convert(boolean) ==============
