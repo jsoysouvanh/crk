@@ -8,35 +8,23 @@ on:
   workflow_dispatch:
 
 jobs:
-  #This initial job waits for all other archive upload workflows to complete
+  # This initial job waits for all other archive upload workflows to complete
   wait_for_archives_upload:
     name: Wait for archives upload
     runs-on: ubuntu-latest
 
     steps:
-      - name: Wait for MacOS archives
+      - name: Wait for all platforms archive
         uses: lewagon/wait-on-check-action@v1.0.0
         with:
           ref: ${{ github.ref }}
-          running-workflow-name: 'MacOS'
+          running-workflow-name: 'Wait for archives upload'
           repo-token: ${{ secrets.GITHUB_TOKEN }}
 
-      #- name: Wait for Windows archives
-      #  uses: lewagon/wait-on-check-action@v1.0.0
-      #  with:
-      #    ref: ${{ github.ref }}
-      #    running-workflow-name: 'Windows'
-      #    repo-token: ${{ secrets.GITHUB_TOKEN }}
 
-      #- name: Wait for Linux archives
-      #  uses: lewagon/wait-on-check-action@v1.0.0
-      #  with:
-      #    ref: ${{ github.ref }}
-      #    running-workflow-name: 'Linux'
-      #    repo-token: ${{ secrets.GITHUB_TOKEN }}
 
   ubuntu_clang:
-    name: Ubuntu | Clang
+    name: Deserialization tests from Ubuntu | Clang
     runs-on: ubuntu-latest
     needs: wait_for_archives_upload
 
@@ -56,39 +44,295 @@ jobs:
         with:
           submodules: 'recursive'
 
-      #- name: Install suitable compiler
-      #  run: sudo apt-get install clang++-${{ matrix.clang_version }}
-
-      #- name: Install ninja
-      #  uses: seanmiddleditch/gha-setup-ninja@master
-
-      #- name: Install CMake
-      #  uses: jwlawson/actions-setup-cmake@v1.8
-      #  with:
-      #    cmake-version: '3.21.0'
-          
-      #- name: Generate Project
-      #  run: |
-      #    cmake --list-presets=all
-      #    cmake --preset="Clang" -DCRK_MIN_CXX_STD_VERSION=${{ matrix.cpp_version }} -DCRK_DEV=1 -DCRK_TESTS_OUTPUT_DIR="${PWD}/TestsOutput"
-
-      #- name: Build crk
-      #  run: cmake --build --preset="Clang ${{ matrix.build_config }}" --target crkReadFromArchiveTests
-
-      - name: Download artifact
+      - name: Download MacOS archives
         uses: dawidd6/action-download-artifact@v2
         with:
           workflow: tests_macos.yml
           workflow_conclusion: success
-          # Optional, directory where to extract artifact(s), defaults to current directory
-          # path: extract_here
 
-      - name: Install Tree
-        run: sudo apt-get install tree
+      - name: Download Windows archives
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          workflow: tests_windows.yml
+          workflow_conclusion: success
 
-      - name: Print folders content
-        run: tree
+      - name: Download Linux archives
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          workflow: tests_linux.yml
+          workflow_conclusion: success
 
-      #- name: Run Tests
-      #  run: ctest --preset="Clang ${build_config}" -R crkReadFromArchiveTests
+      - name: Install suitable compiler
+        run: sudo apt-get install clang++-${{ matrix.clang_version }}
+
+      - name: Install ninja
+        uses: seanmiddleditch/gha-setup-ninja@master
+
+      - name: Install CMake
+        uses: jwlawson/actions-setup-cmake@v1.8
+        with:
+          cmake-version: '3.21.0'
+          
+      - name: Generate Project
+        run: |
+          cmake --list-presets=all
+          cmake --preset="Clang" -DCRK_MIN_CXX_STD_VERSION=${{ matrix.cpp_version }} -DCRK_DEV=1 -DCRK_TESTS_OUTPUT_DIR="${PWD}/TestsOutput"
+
+      - name: Build crk
+        run: cmake --build --preset="Clang ${{ matrix.build_config }}" --target crkReadFromArchiveTests
         
+      - name: Run Tests
+        run: ctest --preset="Clang ${build_config}" -R crkReadFromArchiveTests
+        
+
+
+  ubuntu_gcc:
+    name: Deserialization tests from Ubuntu | GCC
+    runs-on: ubuntu-latest
+    needs: wait_for_archives_upload
+
+    strategy:
+      fail-fast: false
+      matrix:
+        build_config: [Release, Debug]
+        gcc_version: [10, 11]
+        cpp_version: [20]
+
+    env:
+      gcc_compiler_version: -${{ matrix.gcc_version }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          submodules: 'recursive'
+
+      - name: Download MacOS archives
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          workflow: tests_macos.yml
+          workflow_conclusion: success
+
+      - name: Download Windows archives
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          workflow: tests_windows.yml
+          workflow_conclusion: success
+
+      - name: Download Linux archives
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          workflow: tests_linux.yml
+          workflow_conclusion: success
+
+      - name: Install suitable compiler
+        run: sudo apt-get install g++-${{ matrix.gcc_version }}
+
+      - name: Install ninja
+        uses: seanmiddleditch/gha-setup-ninja@master
+
+      - name: Install CMake
+        uses: jwlawson/actions-setup-cmake@v1.8
+        with:
+          cmake-version: '3.21.0'
+
+      - name: Generate Project
+        run: |
+          cmake --list-presets=all
+          cmake --preset="GCC" -DCRK_MIN_CXX_STD_VERSION=${{ matrix.cpp_version }} -DCRK_DEV=1 -DCRK_TESTS_OUTPUT_DIR="${PWD}/TestsOutput"
+
+      - name: Build crk
+        run: cmake --build --preset="GCC ${{ matrix.build_config }}" --target crkReadFromArchiveTests
+
+      - name: Run Tests
+        run: ctest --preset="GCC ${{ matrix.build_config }}" -R crkReadFromArchiveTests
+
+
+
+  ubuntu_clang_special_arch:
+    name: Deserialization tests from Ubuntu | Clang | Specific architectures
+    runs-on: ubuntu-latest
+    needs: wait_for_archives_upload
+
+    strategy:
+      fail-fast: false
+      matrix:
+        arch: [armv7, s390x, aarch64, ppc64le]
+        distro: [ubuntu_latest]
+        cpp_version: [20]
+        build_config: [Release, Debug]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          submodules: 'recursive'
+
+      - name: Download MacOS archives
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          workflow: tests_macos.yml
+          workflow_conclusion: success
+
+      - name: Download Windows archives
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          workflow: tests_windows.yml
+          workflow_conclusion: success
+
+      - name: Download Linux archives
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          workflow: tests_linux.yml
+          workflow_conclusion: success
+
+      - uses: uraimo/run-on-arch-action@v2
+        name: Generate/Build/Test crk in Docker container
+        id: build
+        with:
+          arch: ${{ matrix.arch }}
+          distro: ${{ matrix.distro }}
+
+          # Speeds up builds by caching container image
+          githubToken: ${{ github.token }}
+
+          # Mount the artifacts directory as /artifacts in the container
+          dockerRunArgs: |
+            --volume "${PWD}:/crk_root"
+
+          # Forward matrix variables to the container
+          env: |
+            build_config: ${{ matrix.build_config }}
+            cpp_version: ${{ matrix.cpp_version }}
+            arch: ${{ matrix.arch }}
+
+          # The shell to run commands with in the container
+          shell: /bin/sh
+
+          # Install some dependencies in the container. This speeds up builds if
+          # you are also using githubToken. Any dependencies installed here will
+          # be part of the container image that gets cached, so subsequent
+          # builds don't have to re-install them. The image layer is cached
+          # publicly in your project's package repository, so it is vital that
+          # no secrets are present in the container state or logs.
+          install: |
+            apt-get update -q -y
+
+            apt-get install -y software-properties-common lsb-release git ninja-build clang++-12
+            
+            apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 6AF7F09730B3F0A4
+            wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | gpg --dearmor - | tee /etc/apt/trusted.gpg.d/kitware.gpg >/dev/null
+            apt-add-repository "deb https://apt.kitware.com/ubuntu/ $(lsb_release -cs) main"
+            apt-get update -y
+            apt-get install -y cmake
+
+          run: |
+            cd /crk_root
+
+            cmake --list-presets=all
+            cmake --preset="Clang" -DCRK_MIN_CXX_STD_VERSION=${cpp_version} -DCRK_TESTS_OUTPUT_DIR="${PWD}/TestsOutput" -DCRK_TESTS_OUTPUT_FILENAME="Clang_${build_config}_cpp${cpp_version}_${arch}"
+            cmake --build --preset="Clang ${build_config}" --target crkReadFromArchiveTests
+
+            ctest --preset="Clang ${build_config}" -R crkReadFromArchiveTests
+
+
+
+  windows_msvc_deserialize:
+    name: Deserialization tests from Windows | MSVC
+    runs-on: windows-2019
+    needs: wait_for_archives_upload
+
+    strategy:
+      fail-fast: false
+      matrix:
+        build_config: [Release, Debug]
+        msvc_toolset: [v142]
+        target_architecture: [x64, Win32]
+        cpp_version: [20]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          submodules: 'recursive'
+
+      - name: Download MacOS archives
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          workflow: tests_macos.yml
+          workflow_conclusion: success
+
+      - name: Download Windows archives
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          workflow: tests_windows.yml
+          workflow_conclusion: success
+
+      - name: Download Linux archives
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          workflow: tests_linux.yml
+          workflow_conclusion: success
+
+      - name: Generate Project
+        run: cmake --preset="MSVC" -A ${{ matrix.target_architecture }} -T ${{ matrix.msvc_toolset }} -DCRK_MIN_CXX_STD_VERSION=${{matrix.cpp_version}} -DCRK_DEV=1 -DCRK_TESTS_OUTPUT_DIR="${PWD}/TestsOutput"
+
+      - name: Build crk
+        run: cmake --build --preset="MSVC ${{ matrix.build_config }}" --target crkReadFromArchiveTests
+
+      - name: Run Tests
+        run: ctest --preset="MSVC ${{ matrix.build_config }}" -R crkReadFromArchiveTests
+
+
+
+  macos_clang:
+    name: Deserialization tests from Windows | MSVC
+    runs-on: macos-latest
+    needs: wait_for_archives_upload
+
+    strategy:
+      fail-fast: false
+      matrix:
+        build_config: [Release, Debug]
+        cpp_version: [20]
+        
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          submodules: 'recursive'
+
+      - name: Download MacOS archives
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          workflow: tests_macos.yml
+          workflow_conclusion: success
+
+      - name: Download Windows archives
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          workflow: tests_windows.yml
+          workflow_conclusion: success
+
+      - name: Download Linux archives
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          workflow: tests_linux.yml
+          workflow_conclusion: success
+
+      - name: Install ninja
+        uses: seanmiddleditch/gha-setup-ninja@master
+
+      - name: Install CMake
+        uses: jwlawson/actions-setup-cmake@v1.8
+        with:
+          cmake-version: '3.21.0'
+
+      - name: Generate Project
+        run: cmake --preset="Clang" -DCRK_MIN_CXX_STD_VERSION=${{matrix.cpp_version}} -DCRK_DEV=1 -DCRK_TESTS_OUTPUT_DIR="${PWD}/TestsOutput"
+
+      - name: Build crk
+        run: cmake --build --preset="Clang ${{ matrix.build_config }}" --target crkReadFromArchiveTests
+
+      - name: Run Tests
+        run: ctest --preset="Clang ${{ matrix.build_config }}" -R crkReadFromArchiveTests
