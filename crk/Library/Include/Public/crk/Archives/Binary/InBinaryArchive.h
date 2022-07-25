@@ -160,6 +160,6 @@ namespace crk
 	void deserialize(InBinaryArchive<Size, Endianness, DataModel>& archive, T& object)
 	{
 		archive.readNextBinaryChunk(sizeof(T), reinterpret_cast<std::byte*>(std::addressof(object)));
-		object = Endianness::convert<Endianness, Endianness::getNativeEndianness()>(object);
+		Endianness::convertRef<Endianness, Endianness::getNativeEndianness()>(object);
 	}
 }
