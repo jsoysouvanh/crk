@@ -172,10 +172,11 @@ namespace crk
 	template <FloatingPoint T, std::size_t Size, EEndianness Endianness, DataModel DataModel>
 	void serialize(OutBinaryArchive<Size, Endianness, DataModel>& archive, T const& object)
 	{
-		T endiannessSwappedObject = Endianness::convert<Endianness::getNativeEndianness(), Endianness>(object);
+		T objectCopy = object;
+		Endianness::convertRef<Endianness::getNativeEndianness(), Endianness>(objectCopy);
 
 		//TODO: Might have to consider float endianness if it differs from classic CPU endianness
 
-		archive.appendBinaryChunk(reinterpret_cast<std::byte const*>(std::addressof(endiannessSwappedObject)), sizeof(T));
+		archive.appendBinaryChunk(reinterpret_cast<std::byte const*>(std::addressof(objectCopy)), sizeof(T));
 	}
 }

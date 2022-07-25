@@ -143,6 +143,45 @@ T Endianness::byteSwap(T v) noexcept
 	}
 }
 
+template <typename T>
+void Endianness::byteSwapRef(T& v) noexcept
+{
+	if constexpr (sizeof(T) * CHAR_BIT == 8u)
+	{
+		return;
+	}
+	else if constexpr (sizeof(T) * CHAR_BIT == 16u)
+	{
+		uint16_t tmp;
+		std::memcpy(&tmp, &v, sizeof(uint16_t));
+		tmp = byteSwap16(tmp);
+		std::memcpy(&v, &tmp, sizeof(uint16_t));
+	}
+	else if constexpr (sizeof(T) * CHAR_BIT == 32u)
+	{
+		uint32_t tmp;
+		std::memcpy(&tmp, &v, sizeof(uint32_t));
+		tmp = byteSwap32(tmp);
+		std::memcpy(&v, &tmp, sizeof(uint32_t));
+	}
+	else if constexpr (sizeof(T) * CHAR_BIT == 64u)
+	{
+		uint64_t tmp;
+		std::memcpy(&tmp, &v, sizeof(uint64_t));
+		tmp = byteSwap64(tmp);
+		std::memcpy(&v, &tmp, sizeof(uint64_t));
+	}
+	else //Fallback implementation for any size type
+	{
+		std::byte* byteArray = reinterpret_cast<std::byte*>(&v);
+
+		for (std::size_t byteIndex = 0; byteIndex < sizeof(T) / 2u; byteIndex++)
+		{
+			std::swap(byteArray[byteIndex], byteArray[sizeof(T) - byteIndex - 1u]);
+		}
+	}
+}
+
 constexpr EEndianness Endianness::getNativeEndianness() noexcept
 {
 	//Get endianness using the standard library if possible (C++20~)
@@ -291,4 +330,22 @@ T Endianness::convert(T v) noexcept
 	}
 
 	return v;
+}
+
+template <EEndianness SourceEndianness, EEndianness TargetEndianness, typename T>
+void Endianness::convertRef(T& v) noexcept
+{
+	static_assert(!(isUnknownConversion<SourceEndianness, TargetEndianness>()	||
+				  isBigMixedConversion<SourceEndianness, TargetEndianness>()	||
+				  isLittleMixedConversion<SourceEndianness, TargetEndianness>()),
+				  "[crk] Don't support endianness conversions from/to mixed or unknown endianness.");
+
+	if constexpr (SourceEndianness == TargetEndianness)
+	{
+		//No conversion necessary if source and target endianness are the same
+	}
+	else if constexpr (isLittleBigConversion<SourceEndianness, TargetEndianness>())
+	{
+		byteSwapRef(v);
+	}
 }

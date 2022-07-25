@@ -76,10 +76,10 @@ template <typename T>
 class HexaPrintWrapper
 {
 	private:
-		T _wrappedValue;
+		T const& _wrappedValue;
 
 	public:
-		HexaPrintWrapper(T value):
+		HexaPrintWrapper(T const& value):
 			_wrappedValue{ value }
 		{}
 
@@ -97,7 +97,7 @@ std::ostream& operator<<(std::ostream& stream, HexaPrintWrapper<T> const& wrappe
 	for (int i = 0; i < sizeof(T); ++i)
 		stream << std::hex << std::setfill('0') << std::setw(2) << (int)bytes[i] << " ";
 
-	stream << std::dec << std::endl;
+	stream << std::dec;
 
 	return stream;
 }

@@ -152,6 +152,9 @@ namespace crk
 			template <typename T>
 			CRK_NODISCARD static T					byteSwap(T v)					noexcept;
 
+			template <typename T>
+			static void								byteSwapRef(T& v)				noexcept;
+
 		public:
 			Endianness() = delete;
 
@@ -175,6 +178,9 @@ namespace crk
 			*/
 			template <EEndianness SourceEndianness, EEndianness TargetEndianness, typename T>
 			CRK_NODISCARD static T						convert(T v)			noexcept;
+
+			template <EEndianness SourceEndianness, EEndianness TargetEndianness, typename T>
+			static void									convertRef(T& v)		noexcept;
 	};
 
 	#include "crk/Misc/Endianness.inl"
