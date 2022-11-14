@@ -169,8 +169,9 @@ namespace crk
 		char32_t charAsUTF32;
 		archive.readNextBinaryChunk(sizeof(char32_t), reinterpret_cast<std::byte*>(std::addressof(charAsUTF32)));
 
-#if defined(CRK_WINDOWS_OS)
+		charAsUTF32 = Endianness::convert<Endianness, Endianness::getNativeEndianness()>(charAsUTF32);
 
+#if defined(CRK_WINDOWS_OS)
 		//char32_t > std::string > char16_t
 		
 		//Convert from utf32 char to utf8 string
@@ -187,10 +188,11 @@ namespace crk
 		//TODO: Should probably throw an error or something...
 		//We can't guarantee a functional behaviour anyway since Windows doesn't fulfill the requirement that tells 
 		//wchar_t should be large enough to represent any supported character code point see https://en.cppreference.com/w/cpp/language/types
-		object = Endianness::convert<Endianness, Endianness::getNativeEndianness()>(charAsUTF16String[0]);
+		object = charAsUTF16String[0];
+
 #else
 
-		object = Endianness::convert<Endianness, Endianness::getNativeEndianness()>(charAsUTF32);
+		object = charAsUTF32;
 
 #endif
 	}
