@@ -7,9 +7,13 @@
 
 #pragma once
 
-#include <cstring>		//std::memcpy
-#include <utility>		//std::forward
-#include <fstream>		//std::ofstream
+#include <string>	//std::string, std::u32string
+#include <cassert>	//assert
+#include <cstring>	//std::memcpy
+#include <utility>	//std::forward
+#include <fstream>	//std::ofstream
+#include <locale>	//std::wstring_convert
+#include <codecvt>	//std::codecvt_utf8, std::codecvt_utf8_utf16
 
 #include "crk/Archives/Binary/BinaryArchive.h"
 #include "crk/Archives/Binary/FundamentalTypes/IntegerTraits.h"
@@ -157,6 +161,35 @@ namespace crk
 		T endiannessSwappedObject = Endianness::convert<Endianness::getNativeEndianness(), Endianness>(object);
 
 		archive.appendBinaryChunk(reinterpret_cast<std::byte const*>(std::addressof(endiannessSwappedObject)), sizeof(T));
+	}
+
+	//Specialization to handle wchar_t compatibility between different architectures (Windows > UTF-16, Others OS UTF-32)
+	template <Character T, std::size_t Size, EEndianness Endianness, DataModel DataModel>
+	void serialize(OutBinaryArchive<Size, Endianness, DataModel>& archive, T const& object) requires std::is_same_v<T, wchar_t>
+	{
+#if defined(CRK_WINDOWS_OS)
+
+		//Convert wchar_t > char16_t > char32_t
+		char16_t charAsUTF16 = object;
+
+		//Convert from utf16 char to utf8 string
+		std::wstring_convert<std::codecvt_utf8_utf16<char16_t>, char16_t> convert16;
+		std::string charAsUTF8String = convert16.to_bytes(charAsUTF16);
+
+		//Convert from utf8 string to utf32 char
+		std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t> convert32;
+		std::u32string charAsUTF32String = convert32.from_bytes(charAsUTF8String);
+
+		assert(charAsUTF32String.size() == 1u);
+		char32_t charAsUTF32 = charAsUTF32String[0];
+#else
+
+		char32_t charAsUTF32 = object;
+
+#endif
+
+		//Serialize as a normal char32_t
+		serialize(archive, charAsUTF32);
 	}
 
 	template <Boolean T, std::size_t Size, EEndianness Endianness, DataModel DataModel>

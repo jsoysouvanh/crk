@@ -7,9 +7,12 @@
 
 #pragma once
 
-#include <cassert>
-#include <fstream>		//std::ifstream
-#include <cstring>		//std::memcpy
+#include <cassert>	//assert 
+#include <string>	//std::string, std::u32string
+#include <fstream>	//std::ifstream
+#include <cstring>	//std::memcpy
+#include <locale>	//std::wstring_convert
+#include <codecvt>	//std::codecvt_utf8, std::codecvt_utf8_utf16
 
 #include "crk/Archives/Binary/BinaryArchive.h"
 #include "crk/Archives/Binary/FundamentalTypes/IntegerTraits.h"
@@ -156,6 +159,40 @@ namespace crk
 	{
 		archive.readNextBinaryChunk(sizeof(T), reinterpret_cast<std::byte*>(std::addressof(object)));
 		object = Endianness::convert<Endianness, Endianness::getNativeEndianness()>(object);
+	}
+
+	//Specialization to handle wchar_t compatibility between different architectures (Windows > UTF-16, Others OS UTF-32)
+	template <Character T, std::size_t Size, EEndianness Endianness, DataModel DataModel>
+	void deserialize(InBinaryArchive<Size, Endianness, DataModel>& archive, T& object) requires std::is_same_v<T, wchar_t>
+	{
+		//wchars are serialized as UTF32.
+		char32_t charAsUTF32;
+		archive.readNextBinaryChunk(sizeof(char32_t), reinterpret_cast<std::byte*>(std::addressof(charAsUTF32)));
+
+#if defined(CRK_WINDOWS_OS)
+
+		//char32_t > std::string > char16_t
+		
+		//Convert from utf32 char to utf8 string
+		std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t> convert32;
+		std::string charAsUTF8String = convert32.to_bytes(charAsUTF32);
+
+		//Convert from utf8 string to utf16 char
+		std::wstring_convert<std::codecvt_utf8_utf16<char16_t>, char16_t> convert16;
+		std::u16string charAsUTF16String = convert16.from_bytes(charAsUTF8String);
+
+		//We can't guarantee that the conversion result is a single UTF16 character since
+		//wchar_t is encoded as a UTF32 character in most implementations. For that reason,
+		//if the char32_t can't be converted into a single char16_t, the result is incorrect (but we take the first char16_t from the u16string as the result).
+		//TODO: Should probably throw an error or something...
+		//We can't guarantee a functional behaviour anyway since Windows doesn't fulfill the requirement that tells 
+		//wchar_t should be large enough to represent any supported character code point see https://en.cppreference.com/w/cpp/language/types
+		object = Endianness::convert<Endianness, Endianness::getNativeEndianness()>(charAsUTF16String[0]);
+#else
+
+		object = Endianness::convert<Endianness, Endianness::getNativeEndianness()>(charAsUTF32);
+
+#endif
 	}
 
 	template <FloatingPoint T, std::size_t Size, EEndianness Endianness, DataModel DataModel>
