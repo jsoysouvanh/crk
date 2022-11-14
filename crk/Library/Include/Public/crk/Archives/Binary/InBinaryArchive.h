@@ -119,6 +119,7 @@ namespace crk
 		SerializedIntegerType readInteger;
 		archive.readNextBinaryChunk(sizeof(SerializedIntegerType), reinterpret_cast<std::byte*>(std::addressof(readInteger)));
 		
+		/////// WARNING: May need to invert encoding conversion and endianness conversion
 		//Perform encoding conversion
 		readInteger = convertIntegerFormat<typename decltype(_DataModel)::UsedIntegerFormat, NativeIntegerFormat>(readInteger);
 
@@ -135,6 +136,7 @@ namespace crk
 		WrappedType readInteger;
 		archive.readNextBinaryChunk(sizeof(WrappedType), reinterpret_cast<std::byte*>(std::addressof(readInteger)));
 		
+		/////// WARNING: May need to invert encoding conversion and endianness conversion
 		//Perform encoding conversion
 		readInteger = convertIntegerFormat<typename decltype(_DataModel)::UsedIntegerFormat, NativeIntegerFormat>(readInteger);
 
@@ -160,6 +162,8 @@ namespace crk
 	void deserialize(InBinaryArchive<Size, Endianness, DataModel>& archive, T& object)
 	{
 		archive.readNextBinaryChunk(sizeof(T), reinterpret_cast<std::byte*>(std::addressof(object)));
+
+		//Use convertRef to avoid float copies that may result in a modification of the binary representation of the float
 		Endianness::convertRef<Endianness, Endianness::getNativeEndianness()>(object);
 	}
 }

@@ -22,7 +22,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           submodules: 'recursive'
 
@@ -41,38 +41,3 @@ jobs:
           name: TestsOutput
           path: ./TestsOutput
           retention-days: 1
-
-  #windows_msvc_deserialize:
-  #  name: Windows | MSVC - Deserialize
-  #  runs-on: windows-2019
-  #  if: ${{ always() }}
-  #  needs: [windows_msvc]
-
-  #  strategy:
-  #    fail-fast: false
-  #    matrix:
-  #      build_config: [Release, Debug]
-  #      msvc_toolset: [v142]
-  #      target_architecture: [x64, Win32]
-  #      cpp_version: [20]
-
-  #  steps:
-  #    - name: Checkout repository
-  #      uses: actions/checkout@v2
-  #      with:
-  #        submodules: 'recursive'
-
-  #    - name: Fetch Write Tests Output File(s)
-  #      uses: actions/download-artifact@v3
-  #      with:
-  #        name: TestsOutput
-  #        path: ./TestsOutput
-
-  #    - name: Generate Project
-  #      run: cmake --preset="MSVC" -A ${{ matrix.target_architecture }} -T ${{ matrix.msvc_toolset }} -DCRK_MIN_CXX_STD_VERSION=${{matrix.cpp_version}} -DCRK_DEV=1 -DCRK_TESTS_OUTPUT_DIR="${PWD}/TestsOutput"
-
-  #    - name: Build crk
-  #      run: cmake --build --preset="MSVC ${{ matrix.build_config }}" --target crkReadFromArchiveTests
-
-  #    - name: Run Tests
-  #      run: ctest --preset="MSVC ${{ matrix.build_config }}" -R crkReadFromArchiveTests

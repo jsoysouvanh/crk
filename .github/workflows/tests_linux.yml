@@ -24,7 +24,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           submodules: 'recursive'
 
@@ -73,7 +73,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           submodules: 'recursive'
 
@@ -120,7 +120,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           submodules: 'recursive'
 
@@ -179,78 +179,3 @@ jobs:
           name: TestsOutput
           path: ./TestsOutput
           retention-days: 1
-
-#  ubuntu_clang_special_arch_read_tests:
-#    name: Ubuntu | ${{ matrix.arch }} | Clang | C++${{ matrix.cpp_version }} | ${{ matrix.build_config }}
-#    runs-on: ubuntu-latest
-#    if: ${{ always() }}
-#    needs: [ubuntu_clang, ubuntu_gcc, ubuntu_clang_special_arch]
-    
-#    strategy:
-#      fail-fast: false
-#      matrix:
-#        build_config: [Release, Debug]
-#        cpp_version: [20]
-#        arch: [armv7, s390x, aarch64, ppc64le]
-#        distro: [ubuntu_latest]
-
-#    steps:
-#      - name: Checkout repository
-#        uses: actions/checkout@v2
-#        with:
-#          submodules: 'recursive'
-
-#      - name: Fetch Write Tests Output File(s)
-#        uses: actions/download-artifact@v3
-#        with:
-#          name: TestsOutput
-#          path: ./TestsOutput
-
-#      - uses: uraimo/run-on-arch-action@v2
-#        name: Generate/Build/Test crk in Docker container
-#        id: build
-#        with:
-#          arch: ${{ matrix.arch }}
-#          distro: ${{ matrix.distro }}
-
-#          # Speeds up builds by caching container image
-#          githubToken: ${{ github.token }}
-
-#          # Mount the artifacts directory as /artifacts in the container
-#          dockerRunArgs: |
-#            --volume "${PWD}:/crk_root"
-
-#          # Forward matrix variables to the container
-#          env: |
-#            build_config: ${{ matrix.build_config }}
-#            cpp_version: ${{ matrix.cpp_version }}
-#            arch: ${{ matrix.arch }}
-
-#          # The shell to run commands with in the container
-#          shell: /bin/sh
-
-#          # Install some dependencies in the container. This speeds up builds if
-#          # you are also using githubToken. Any dependencies installed here will
-#          # be part of the container image that gets cached, so subsequent
-#          # builds don't have to re-install them. The image layer is cached
-#          # publicly in your project's package repository, so it is vital that
-#          # no secrets are present in the container state or logs.
-#          install: |
-#            apt-get update -q -y
-
-#            apt-get install -y software-properties-common lsb-release git ninja-build clang++-12
-            
-#            apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 6AF7F09730B3F0A4
-#            wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | gpg --dearmor - | tee /etc/apt/trusted.gpg.d/kitware.gpg >/dev/null
-#            apt-add-repository "deb https://apt.kitware.com/ubuntu/ $(lsb_release -cs) main"
-#            apt-get update -y
-#            apt-get install -y cmake
-
-#          run: |
-#            cd /crk_root
-
-#            cmake --list-presets=all
-#            cmake --preset="Clang" -DCRK_MIN_CXX_STD_VERSION=${cpp_version} -DCRK_TESTS_OUTPUT_DIR="${PWD}/TestsOutput"
-#            cmake --build --preset="Clang ${build_config}" --target crkReadFromArchiveTests
-
-#            ctest --preset="Clang ${build_config}" -R crkReadFromArchiveTests

@@ -40,7 +40,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           submodules: 'recursive'
 
@@ -103,7 +103,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           submodules: 'recursive'
 
@@ -164,7 +164,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           submodules: 'recursive'
 
@@ -237,7 +237,7 @@ jobs:
 
 
 
-  windows_msvc_deserialize:
+  windows_msvc:
     name: Deserialization tests from Windows | MSVC
     runs-on: windows-2019
     needs: wait_for_archives_upload
@@ -252,7 +252,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           submodules: 'recursive'
 
@@ -286,7 +286,7 @@ jobs:
 
 
   macos_clang:
-    name: Deserialization tests from Windows | MSVC
+    name: Deserialization tests from MacOS | Clang
     runs-on: macos-latest
     needs: wait_for_archives_upload
 
@@ -298,7 +298,7 @@ jobs:
         
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           submodules: 'recursive'
 
