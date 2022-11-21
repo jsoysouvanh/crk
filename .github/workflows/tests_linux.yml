@@ -38,6 +38,9 @@ jobs:
         uses: jwlawson/actions-setup-cmake@v1.8
         with:
           cmake-version: '3.21.0'
+
+      - name: Install Kodgen dependencies
+        run: sudo apt-get install libtinfo5
           
       - name: Generate Project
         run: |
@@ -48,7 +51,7 @@ jobs:
         run: cmake --build --preset="Clang ${{ matrix.build_config }}" --target crkEndiannessTests crkWriteToArchiveTests crkIntegerTraitsTests
 
       - name: Run Tests
-        run: ctest --preset="Clang ${{ matrix.build_config }}" -E crkReadFromArchiveTests
+        run: ctest --preset="Clang ${{ matrix.build_config }}" -E "CppPropertiesDemoProject|ThreadingTests|crkReadFromArchiveTests"
 
       - name: Upload Output File(s)
         uses: actions/upload-artifact@v3
@@ -88,6 +91,9 @@ jobs:
         with:
           cmake-version: '3.21.0'
 
+      - name: Install Kodgen dependencies
+        run: sudo apt-get install libtinfo5
+
       - name: Generate Project
         run: |
           cmake --list-presets=all
@@ -97,7 +103,7 @@ jobs:
         run: cmake --build --preset="GCC ${{ matrix.build_config }}" --target crkEndiannessTests crkWriteToArchiveTests crkIntegerTraitsTests
 
       - name: Run Tests
-        run: ctest --preset="GCC ${{ matrix.build_config }}" -E crkReadFromArchiveTests
+        run: ctest --preset="GCC ${{ matrix.build_config }}" -E "CppPropertiesDemoProject|ThreadingTests|crkReadFromArchiveTests"
 
       - name: Upload Output File(s)
         uses: actions/upload-artifact@v3
@@ -163,6 +169,7 @@ jobs:
             apt-add-repository "deb https://apt.kitware.com/ubuntu/ $(lsb_release -cs) main"
             apt-get update -y
             apt-get install -y cmake
+            apt-get install -y libtinfo5
 
           run: |
             cd /crk_root
@@ -171,7 +178,7 @@ jobs:
             cmake --preset="Clang" -DCRK_MIN_CXX_STD_VERSION=${cpp_version} -DCRK_TESTS_OUTPUT_DIR="${PWD}/TestsOutput" -DCRK_TESTS_OUTPUT_FILENAME="Clang_${build_config}_cpp${cpp_version}_${arch}"
             cmake --build --preset="Clang ${build_config}" --target crkEndiannessTests crkWriteToArchiveTests crkIntegerTraitsTests
 
-            ctest --preset="Clang ${build_config}" -E crkReadFromArchiveTests
+            ctest --preset="Clang ${build_config}" -E "CppPropertiesDemoProject|ThreadingTests|crkReadFromArchiveTests"
 
       - name: Upload Output File(s)
         uses: actions/upload-artifact@v3

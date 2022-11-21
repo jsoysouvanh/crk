@@ -39,7 +39,7 @@ jobs:
         run: cmake --build --preset="Clang ${{ matrix.build_config }}" --target crkEndiannessTests crkWriteToArchiveTests crkIntegerTraitsTests
 
       - name: Run Tests
-        run: ctest --preset="Clang ${{ matrix.build_config }}" -E crkReadFromArchiveTests
+        run: ctest --preset="Clang ${{ matrix.build_config }}" -E "CppPropertiesDemoProject|ThreadingTests|crkReadFromArchiveTests"
 
       - name: Upload Output File(s)
         uses: actions/upload-artifact@v3

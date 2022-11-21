@@ -37,6 +37,9 @@ jobs:
       - name: Install lcov
         run: sudo apt-get install lcov
 
+      - name: Install Kodgen dependencies
+        run: sudo apt-get install libtinfo5
+
       - name: Generate Project
         env:
           gcc_compiler_version: -10

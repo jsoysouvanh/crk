@@ -4,6 +4,7 @@
 #include <Kodgen/CodeGen/Macro/MacroCodeGenUnit.h>
 #include <Kodgen/CodeGen/CodeGenManager.h>
 #include <Kodgen/CodeGen/Macro/MacroCodeGenUnitSettings.h>
+#include <Kodgen/Parsing/FileParser.h>
 
 //#include "RefurekuGenerator/Parsing/FileParser.h"
 //#include "RefurekuGenerator/CodeGen/ReflectionCodeGenModule.h"
@@ -113,7 +114,7 @@ void parseAndGenerate(fs::path&& settingsFilePath)
 {
 	kodgen::DefaultLogger logger;
 
-	rfk::FileParser fileParser;
+	kodgen::FileParser fileParser;
 	fileParser.logger = &logger;
 
 	kodgen::CodeGenManager codeGenMgr;
