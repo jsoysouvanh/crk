@@ -27,7 +27,7 @@ jobs:
           submodules: 'recursive'
 
       - name: Generate Project
-        run: cmake --preset="MSVC" -A ${{ matrix.target_architecture }} -T ${{ matrix.msvc_toolset }} -DCRK_MIN_CXX_STD_VERSION=${{matrix.cpp_version}} -DCRK_DEV=1 -DCRK_TESTS_OUTPUT_DIR="${PWD}/TestsOutput" -DCRK_TESTS_OUTPUT_FILENAME="MSVC2019_${{ matrix.msvc_toolset }}_${{ matrix.target_architecture }}_${{ matrix.build_config }}_cpp${{ matrix.cpp_version }}"
+        run: cmake --preset="MSVC" -A ${{ matrix.target_architecture }} -T ${{ matrix.msvc_toolset }} -DCRK_MIN_CXX_STD_VERSION=${{matrix.cpp_version}} -DCRK_DEV=1 -DCRK_CI=1 -DCRK_TESTS_OUTPUT_DIR="${PWD}/TestsOutput" -DCRK_TESTS_OUTPUT_FILENAME="MSVC2019_${{ matrix.msvc_toolset }}_${{ matrix.target_architecture }}_${{ matrix.build_config }}_cpp${{ matrix.cpp_version }}"
 
       - name: Build crk
         run: cmake --build --preset="MSVC ${{ matrix.build_config }}" --target crkEndiannessTests crkWriteToArchiveTests crkIntegerTraitsTests

@@ -76,7 +76,7 @@ jobs:
       - name: Generate Project
         run: |
           cmake --list-presets=all
-          cmake --preset="Clang" -DCRK_MIN_CXX_STD_VERSION=${{ matrix.cpp_version }} -DCRK_DEV=1 -DCRK_TESTS_OUTPUT_DIR="${PWD}/TestsOutput"
+          cmake --preset="Clang" -DCRK_MIN_CXX_STD_VERSION=${{ matrix.cpp_version }} -DCRK_DEV=1 -DCRK_CI=1 -DCRK_TESTS_OUTPUT_DIR="${PWD}/TestsOutput"
 
       - name: Build crk
         run: cmake --build --preset="Clang ${{ matrix.build_config }}" --target crkReadFromArchiveTests
@@ -139,7 +139,7 @@ jobs:
       - name: Generate Project
         run: |
           cmake --list-presets=all
-          cmake --preset="GCC" -DCRK_MIN_CXX_STD_VERSION=${{ matrix.cpp_version }} -DCRK_DEV=1 -DCRK_TESTS_OUTPUT_DIR="${PWD}/TestsOutput"
+          cmake --preset="GCC" -DCRK_MIN_CXX_STD_VERSION=${{ matrix.cpp_version }} -DCRK_DEV=1 -DCRK_CI=1 -DCRK_TESTS_OUTPUT_DIR="${PWD}/TestsOutput"
 
       - name: Build crk
         run: cmake --build --preset="GCC ${{ matrix.build_config }}" --target crkReadFromArchiveTests
@@ -275,7 +275,7 @@ jobs:
           workflow_conclusion: success
 
       - name: Generate Project
-        run: cmake --preset="MSVC" -A ${{ matrix.target_architecture }} -T ${{ matrix.msvc_toolset }} -DCRK_MIN_CXX_STD_VERSION=${{matrix.cpp_version}} -DCRK_DEV=1 -DCRK_TESTS_OUTPUT_DIR="${PWD}/TestsOutput"
+        run: cmake --preset="MSVC" -A ${{ matrix.target_architecture }} -T ${{ matrix.msvc_toolset }} -DCRK_MIN_CXX_STD_VERSION=${{matrix.cpp_version}} -DCRK_DEV=1 -DCRK_CI=1 -DCRK_TESTS_OUTPUT_DIR="${PWD}/TestsOutput"
 
       - name: Build crk
         run: cmake --build --preset="MSVC ${{ matrix.build_config }}" --target crkReadFromArchiveTests
@@ -329,7 +329,7 @@ jobs:
           cmake-version: '3.21.0'
 
       - name: Generate Project
-        run: cmake --preset="Clang" -DCRK_MIN_CXX_STD_VERSION=${{matrix.cpp_version}} -DCRK_DEV=1 -DCRK_TESTS_OUTPUT_DIR="${PWD}/TestsOutput"
+        run: cmake --preset="Clang" -DCRK_MIN_CXX_STD_VERSION=${{matrix.cpp_version}} -DCRK_DEV=1 -DCRK_CI=1 -DCRK_TESTS_OUTPUT_DIR="${PWD}/TestsOutput"
 
       - name: Build crk
         run: cmake --build --preset="Clang ${{ matrix.build_config }}" --target crkReadFromArchiveTests

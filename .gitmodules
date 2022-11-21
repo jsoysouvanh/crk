@@ -1,0 +1,3 @@
+[submodule "crk/Generator/ThirdParty/Kodgen"]
+	path = crk/Generator/ThirdParty/Kodgen
+	url = https://github.com/jsoysouvanh/Kodgen.git

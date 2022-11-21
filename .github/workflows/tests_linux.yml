@@ -42,7 +42,7 @@ jobs:
       - name: Generate Project
         run: |
           cmake --list-presets=all
-          cmake --preset="Clang" -DCRK_MIN_CXX_STD_VERSION=${{ matrix.cpp_version }} -DCRK_DEV=1 -DCRK_TESTS_OUTPUT_DIR="${PWD}/TestsOutput" -DCRK_TESTS_OUTPUT_FILENAME="Clang${{ matrix.clang_version }}_${{ matrix.build_config }}_cpp${{ matrix.cpp_version }}_GHA"
+          cmake --preset="Clang" -DCRK_MIN_CXX_STD_VERSION=${{ matrix.cpp_version }} -DCRK_DEV=1 -DCRK_CI=1 -DCRK_TESTS_OUTPUT_DIR="${PWD}/TestsOutput" -DCRK_TESTS_OUTPUT_FILENAME="Clang${{ matrix.clang_version }}_${{ matrix.build_config }}_cpp${{ matrix.cpp_version }}_GHA"
 
       - name: Build crk
         run: cmake --build --preset="Clang ${{ matrix.build_config }}" --target crkEndiannessTests crkWriteToArchiveTests crkIntegerTraitsTests
@@ -91,7 +91,7 @@ jobs:
       - name: Generate Project
         run: |
           cmake --list-presets=all
-          cmake --preset="GCC" -DCRK_MIN_CXX_STD_VERSION=${{ matrix.cpp_version }} -DCRK_DEV=1 -DCRK_TESTS_OUTPUT_DIR="${PWD}/TestsOutput" -DCRK_TESTS_OUTPUT_FILENAME="GCC${{ matrix.gcc_version }}_${{ matrix.build_config }}_cpp${{ matrix.cpp_version }}_GHA"
+          cmake --preset="GCC" -DCRK_MIN_CXX_STD_VERSION=${{ matrix.cpp_version }} -DCRK_DEV=1 -DCRK_CI=1 -DCRK_TESTS_OUTPUT_DIR="${PWD}/TestsOutput" -DCRK_TESTS_OUTPUT_FILENAME="GCC${{ matrix.gcc_version }}_${{ matrix.build_config }}_cpp${{ matrix.cpp_version }}_GHA"
 
       - name: Build crk
         run: cmake --build --preset="GCC ${{ matrix.build_config }}" --target crkEndiannessTests crkWriteToArchiveTests crkIntegerTraitsTests

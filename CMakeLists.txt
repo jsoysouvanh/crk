@@ -9,4 +9,7 @@ message("Compiler:	${CMAKE_CXX_COMPILER_ID} ${CMAKE_CXX_COMPILER_VERSION}")
 # Enable tests
 include(CTest)
 
+# Include crk CMake helper functions
+include(CMake/crkHelpers.cmake)
+
 add_subdirectory(crk)
