@@ -43,7 +43,7 @@ jobs:
       - name: Generate Project
         env:
           gcc_compiler_version: -10
-        run: cmake --preset="GCC" -DCRK_GEN_CODECOV_REPORT=1
+        run: cmake --preset="GCC" -DCRK_GEN_CODECOV_REPORT=1 -DCRK_TESTS_OUTPUT_DIR="${PWD}"
 
       - name: Build crk
         run: cmake --build --preset="GCC ${{ matrix.build_config }}"

@@ -20,7 +20,7 @@ namespace crk::tests
 			fs::path _serializedDataDir;
 
 			std::unordered_map<std::string, crk::InBinaryArchive<crk::tests::defaultBinArchiveSize, crk::EEndianness::Little, DataModel>>	_littleEndianFiles;
-			std::unordered_map<std::string, crk::InBinaryArchive<crk::tests::defaultBinArchiveSize, crk::EEndianness::Big, DataModel>>	_bigEndianFiles;
+			std::unordered_map<std::string, crk::InBinaryArchive<crk::tests::defaultBinArchiveSize, crk::EEndianness::Big, DataModel>>		_bigEndianFiles;
 			std::unordered_map<std::string, crk::InBinaryArchive<crk::tests::defaultBinArchiveSize, crk::EEndianness::Mixed, DataModel>>	_mixedEndianFiles;
 
 		public:
